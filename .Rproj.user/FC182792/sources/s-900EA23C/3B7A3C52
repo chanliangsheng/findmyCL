@@ -1,0 +1,28 @@
+{
+    "id": "3B7A3C52",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1641992181435.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "id": "8a08dc7f280849e6b3b49b6af3da7eaa",
+        "name": "spliceResult",
+        "title": "spliceResult",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 2894980360040,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1641992181435,
+    "read_only": false,
+    "read_only_alternatives": []
+}
