@@ -90,7 +90,7 @@ splicePA_MLCL <- function(PA , chain_double , oxygen , FA){
 }
 
 splice2FA_MLCL <- function(splicePA , FA){
-  data_deal <- t(splicePA[["PA"]])
+  list <- findmyCL::turnDataframeList(dataframe = splicePA[["PA"]])
   list <- lapply(seq_len(ncol(data_deal)), function(i) data_deal[,i])
   #将数据框转换为列表便于多线程
   spliceFA_result <- purrr::map(.x = list , .f = findmyCL::splice2FA_MLCL_main , FA = FA)
@@ -105,7 +105,7 @@ splice2FA_MLCL <- function(splicePA , FA){
   spliceFA_result <- plyr::rbind.fill(spliceFA_result)
   #从列表转换为数据框，并且将所有结果行整合
   data_deal <- t(spliceFA_result)
-  list <- lapply(seq_len(ncol(data_deal)), function(i) data_deal[,i])
+  list <- findmyCL::turnDataframeList(dataframe = spliceFA_result)
   #将数据框转换为列表便于多线程
   spliceFA_result <- purrr::map(.x = list , .f = findmyCL::splice1FA_1PA_into_MLCL)
 
