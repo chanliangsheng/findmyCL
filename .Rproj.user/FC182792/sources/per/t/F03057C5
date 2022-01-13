@@ -1,0 +1,27 @@
+{
+    "id": "F03057C5",
+    "path": "D:/findmyCL/findmyCL/R/splicePAFA_MLCL.R",
+    "project_path": "R/splicePAFA_MLCL.R",
+    "type": "r_source",
+    "hash": "3486062326",
+    "contents": "",
+    "dirty": false,
+    "created": 1642040613329.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "17,37",
+        "scrollLine": "16",
+        "docOutlineVisible": "1"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1642061991,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1642061991357,
+    "read_only": false,
+    "read_only_alternatives": []
+}
