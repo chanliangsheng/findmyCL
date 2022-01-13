@@ -33,9 +33,17 @@ splicePAFA_MLCL <- function(MS2 , MS1){
     #如果这个二级的PA都无法拼接成心磷脂，则将这个二级去除（即返回NULL）
     names(splicePA_result) <- 1:length(splicePA_result)
     #重命名拼接PA的结果
-
+    spliceFA_result <- purrr::map(.x = splicePA_result , .f = findmyCL::splice2FA_MLCL , FA = MS2$FA) %>%
+      findmyCL::deleteNULL()
+    #用PA的拼接结果拼接2个FA，并且找另外一个FA能一起拼接成MLCL
+    if (length(spliceFA_result) == 0) {
+      return(NULL)
+    }
+    #如果不能拼接成MLCL，则返回NULL
+    return(spliceFA_result)
+    #返回最终结果
   }
-  #假如既有PA，也有FA，则先拼接成一个PA，PA再由FA拼接
+  #假如既有PA，也有FA，则先拼接成一个PA，PA再由FA拼接,再找1个FA拼接成MLCL
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
 
