@@ -308,9 +308,9 @@ splice4FA <- function(FA , chain_double , oxygen){
   #将所有组合可能的chain:double相加，4行相加
   oxygen_add_result <- FA[FA_combination[ , 1] , 5] + FA[FA_combination[ , 2] , 5] + FA[FA_combination[ , 3] , 5] + FA[FA_combination[ , 4] , 5]
   #将所有组合可能的氧原子个数相加，4行相加
-  matchresult <- which(chain_add_result == chain_double) && which(oxygen_add_result == 14)
-  #即与chain：double相等又与氧原子个数相等的行号
-  if (is.na(matchresult)) {
+  matchresult <- intersect(which(chain_add_result == chain_double) , which(oxygen_add_result == oxygen))
+  #取即与chain：double相等又与氧原子个数相等的行号
+  if (length(matchresult) == 0) {
     return(NULL)
   }
   #如果配对没有成功，则返回空值
