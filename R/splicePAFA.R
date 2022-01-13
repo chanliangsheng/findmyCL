@@ -322,8 +322,8 @@ splice4FA <- function(FA , chain_double , oxygen){
   catch_result <- append(x = catch_result , values = chain_double)
   catch_result <- append(x = catch_result , values = oxygen)
   names(catch_result) <- c("FA","Chain Length:Δ" , "oxygen")
-
+  #追加属性，重命名结果
   return(catch_result)
-  #
+  #返回结果
 }
 #如果没有PA但是有PA，则只拼接4条FA
