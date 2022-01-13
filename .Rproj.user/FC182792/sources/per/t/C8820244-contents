@@ -74,7 +74,7 @@ matchMS2_main <- function(object , ppm = 30 ,ms2checkresult_name = "CL" ,workers
 check_MS1_MS2_HeadFAPA <- function(bigMS1, ppm = 30 , ms2checkresult_name){
   MS1_dealing <- bigMS1[-1]
   #去除一级的信息
-  result <- purrr::map(.x = MS1_dealing,.f = findmyCL::check_HeadFAPA,ppm = ppm,MS1 = bigMS1$MS1 , ms2checkresult_name = ms2checkresult_name)
+  result <- purrr::map(.x = MS1_dealing,.f = findmyCL::check_HeadFAPA,ppm = ppm,MS1 = MS1$MS1 , ms2checkresult_name = ms2checkresult_name)
   #批量检查所有一个MS1中的所有MS2是否有头基和PA、FA，如果没有头基，则返回NULL，如果有头基但是没有PA和FA，也返回NULL
 
   result <- findmyCL::deleteNULL(list = result)
@@ -86,7 +86,7 @@ check_MS1_MS2_HeadFAPA <- function(bigMS1, ppm = 30 , ms2checkresult_name){
   if (length(result) > 0) {
     store <- list()
     #存储结果
-    store <- findmyCL::fappend(store,bigMS1[[1]])
+    store <- findmyCL::fappend(store,MS1[[1]])
     #追加一级的信息
     store <- append(x = store,values = result)
     #存储结果

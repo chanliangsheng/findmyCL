@@ -1,0 +1,28 @@
+{
+    "id": "BB1588B9",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1641990162897.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "id": "083960e3e6164ffda521d1fa26d57277",
+        "name": "rawdata",
+        "title": "rawdata",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 2895085997888,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1641990162897,
+    "read_only": false,
+    "read_only_alternatives": []
+}
