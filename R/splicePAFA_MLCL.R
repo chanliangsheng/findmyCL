@@ -180,3 +180,58 @@ splice1FA_1PA_into_MLCL <- function(spliceFA_result_dataframe , FA , chain_doubl
   return(result)
   #返回结果
 }
+
+
+#' @title Splice 3FA into a MLCL
+#' @description Splice 3FA into a MLCL which have no PA.
+#' @param FA dataframe(1)
+#' @param chain_double character(1)，like "14:0".
+#' @param oxygen numeric(1)
+#' @return list(1)
+#' @export
+splice3FA_MLCL <- function(FA , chain_double , oxygen){
+  FA_num <- length(FA[,1])
+  #求一共有多少个FA
+  FA_combination <- expand.grid(rep(list(1 : FA_num), 3)) %>%
+    apply(1 , sort , decreasing = T) %>%
+    t() %>%
+    as.data.frame() %>%
+    dplyr::distinct()
+  #计算所有的组合可能(行号的组合)
+  chain_add_result <- findmyCL::add_2Chain(vector1 = FA[FA_combination[ , 1] , 4] , FA[FA_combination[ , 2] , 4]) %>%
+    findmyCL::add_2Chain(FA[FA_combination[ , 3] , 4])
+  #将所有组合可能的chain:double相加，3行相加(FA中的chain:double相加)
+  oxygen_add_result <- FA[FA_combination[ , 1] , 5] + FA[FA_combination[ , 2] , 5] + FA[FA_combination[ , 3] , 5]
+  #将所有组合可能的氧原子个数相加，3行相加(FA中的oxygen相加)
+  matchresult <- intersect(which(chain_add_result == chain_double) , which(oxygen_add_result == oxygen))
+  #取即与chain：double相等又与氧原子个数相等的行号
+  if (length(matchresult) == 0) {
+    return(NULL)
+  }
+  #如果配对没有成功，则返回空值
+  FA_combination_result <- FA_combination[matchresult , ]
+  #将配对成功结果的行号保存
+  catch_result <- purrr::pmap(.l = list(row1 = list(FA_combination_result[,1]) , row2 = list(FA_combination_result[,2]) , row3 = list(FA_combination_result[,3])) , .f = findmyCL::catchDataframe3Col , dataframe = FA)
+  #将所有符合的行提取
+  catch_result <- append(x = catch_result , values = chain_double)
+  catch_result <- append(x = catch_result , values = oxygen)
+  names(catch_result) <- c("FA","Chain Length:Δ" , "oxygen")
+  #追加属性，重命名结果
+  return(catch_result)
+  #返回结果
+}
+
+#' @title Bind 3 row by column in a dataframe
+#' @param row1 numeric(1)
+#' @param row2 numeric(2)
+#' @param row3 numeric(3)
+#' @param row4 numeric(4)
+#' @param dataframe dataframe(1)
+#' @return dataframe(1)
+#' @export
+catchDataframe3Col <- function(row1 , row2 , row3 ,dataframe){
+  dataframe <- cbind(dataframe[row1,] , dataframe[row2,] , dataframe[row3,] )
+  #合并4行为一行
+  return(dataframe)
+}
+#绑定一个数据框的某四行
