@@ -89,26 +89,42 @@ splicePA_MLCL <- function(PA , chain_double , oxygen , FA){
   #返回结果
 }
 
+#' @title Splice 1PA & 1FA into MLCL.
+#' @description First,splice 2FA into 1PA.Second,search the third FA which can be splice into a MLCL with this 2FA(can be splice into 1PA).
+#' @param splicePA list(1),including PA,Chain Length:Δ,oxygen.
+#' @param FA dataframe(1)
+#' @return list(1)
+#' @export
 splice2FA_MLCL <- function(splicePA , FA){
   list <- findmyCL::turnDataframeList(dataframe = splicePA[["PA"]])
-  list <- lapply(seq_len(ncol(data_deal)), function(i) data_deal[,i])
   #将数据框转换为列表便于多线程
   spliceFA_result <- purrr::map(.x = list , .f = findmyCL::splice2FA_MLCL_main , FA = FA)
   #求由FA拼接成PA的结果
   spliceFA_result <- findmyCL::deleteNULL(spliceFA_result)
   #去除NULL
-
   if (length(spliceFA_result) == 0) {
     return(NULL)
   }
   #如果FA没有配对成功，则返回空值
   spliceFA_result <- plyr::rbind.fill(spliceFA_result)
   #从列表转换为数据框，并且将所有结果行整合
-  data_deal <- t(spliceFA_result)
+
   list <- findmyCL::turnDataframeList(dataframe = spliceFA_result)
   #将数据框转换为列表便于多线程
-  spliceFA_result <- purrr::map(.x = list , .f = findmyCL::splice1FA_1PA_into_MLCL)
-
+  spliceFA_result <- purrr::map(.x = list , .f = findmyCL::splice1FA_1PA_into_MLCL , FA = FA ,chain_double = splicePA$`Chain Length:Δ` , oxygen = splicePA$oxygen) %>%
+    findmyCL::deleteNULL()
+  #计算2个FA和1个FA能否组成一个MLCL
+  if (length(spliceFA_result) == 0) {
+    return(NULL)
+  }
+  #如果无法拼接成MLCL，则返回NULL
+  spliceFA_result <- plyr::rbind.fill(spliceFA_result)
+  #从列表转换为数据框，并且将所有结果行整合
+  store <- list(spliceFA_result , splicePA[["Chain Length:Δ"]] , splicePA[["oxygen"]])
+  #存储FA拼接的结果
+  names(store) <- c("FA" , "Chain Length:Δ" , "oxygen")
+  #重命名结果
+  return(store)
 }
 
 #' @title Splice 2FA into a PA in MLCL
@@ -141,13 +157,21 @@ splice2FA_MLCL_main <- function(splicePA_dataframe , FA){
 #' @return dataframe(1)
 #' @export
 splice1FA_1PA_into_MLCL <- function(spliceFA_result_dataframe , FA , chain_double , oxygen){
+  spliceFA_result_dataframe <- as.matrix(spliceFA_result_dataframe) %>%
+    t() %>%
+    as.data.frame()
+  #转换为数据框，因为传入的可能是向量
   chain_add_result <- findmyCL::add_2Chain(vector1 = spliceFA_result_dataframe[1,4] , vector2 = spliceFA_result_dataframe[1,9]) %>%
     findmyCL::add_2Chain(vector2 = FA$`Chain Length:Δ`)
   #将2个FA的Chain Length:Δ和单个FA的Chain Length:Δ相加
-  Oxform_add_result <- spliceFA_result_dataframe[1,5] + spliceFA_result_dataframe[1,10] + FA$Oxform
-  #将2个FA的Oxform和单个FA的Oxform相加
+  Oxform_add_result <- as.numeric(spliceFA_result_dataframe[1,5]) + as.numeric(spliceFA_result_dataframe[1,10]) + FA$Oxform
+  #将2个FA的Oxform之和与单个FA的Oxform相加
   match_number <- which((chain_add_result == chain_double) && (Oxform_add_result == oxygen))
   #求能与一级的Chain Length:Δ和Oxform相符的结果
+  if (length(match_number) == 0) {
+    return(NULL)
+  }
+  #如果3个FAChain Length:Δ相加和Oxform相加的结合没有与一级心磷脂的Chain Length:Δ和Oxform对得上，则返回空值
   options(warn = -1)
   #不提示警告
   result <- cbind(spliceFA_result_dataframe , FA[match_number,])
