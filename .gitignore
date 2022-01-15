@@ -5,3 +5,5 @@
 *.ali
 
 *.mzml
+
+.Rhistory

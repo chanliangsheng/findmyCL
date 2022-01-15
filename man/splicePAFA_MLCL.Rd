@@ -15,5 +15,5 @@ splicePAFA_MLCL(MS2, MS1)
 list(1),a new MS2,adding PA&FA splicing result
 }
 \description{
-A function to search PA and FA from MS2.If this MS1 can not search its 2 PA,delete this MS1(this MS1 may not have just one corresponding Cardiolipin).If this MS2 can search its PA but can not searth corresponding 2 FA or it can just match one FA,delete this MS2.
+MLCL:Monohydrolyzed cardiolipin(have 1 PA and 1FA).A function to search PA and FA from MS2.If this MS1 can not search its 2 PA,delete this MS1(this MS1 may not have just one corresponding Cardiolipin).If this MS2 can search its PA but can not search corresponding 2 FA or it can just match one FA,delete this MS2.
 }
