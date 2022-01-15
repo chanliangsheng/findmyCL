@@ -236,6 +236,8 @@ splice3FA_MLCL <- function(FA , chain_double , oxygen){
   #将配对成功结果的行号保存
   catch_result <- purrr::pmap(.l = list(row1 = list(FA_combination_result[,1]) , row2 = list(FA_combination_result[,2]) , row3 = list(FA_combination_result[,3])) , .f = findmyCL::catchDataframe3Col , dataframe = FA)
   #将所有符合的行提取
+  rownames(catch_result[[1]]) <- 1:length(catch_result[[1]][,1])
+  #重命名最终的拼接结果数据框
   catch_result <- append(x = catch_result , values = chain_double)
   catch_result <- append(x = catch_result , values = oxygen)
   names(catch_result) <- c("FA","Chain Length:Δ" , "oxygen")
