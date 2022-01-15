@@ -38,27 +38,29 @@ splicePAFA_MLCL <- function(MS2 , MS1){
   #假如没有FA，则只拼接PA，但是拼接成MLCL需要一个PA+一个FA，若没有FA，则无法拼接成MLCL
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   if ((haveFA == 5) & (havePA == 5)){
-    splicePA_result <- purrr::pmap(.l = list(as.list(MS1$`Chain Length:Δ`) , as.list(MS1$Oxform)) , .f = findmyCL::splicePA_MLCL , PA = MS2$PA , FA = MS2$FA)
-    splicePA_result <- findmyCL::deleteNULL(splicePA_result)
+    splicePA_list <- purrr::pmap(.l = list(as.list(MS1$`Chain Length:Δ`) , as.list(MS1$Oxform)) , .f = findmyCL::splicePA_MLCL , PA = MS2$PA , FA = MS2$FA) %>%
+    findmyCL::deleteNULL()
     #去除NULL
-    if (length(splicePA_result) == 0) {
+    if (length(splicePA_list) == 0) {
       return(NULL)
     }
     #如果这个二级的PA都无法拼接成心磷脂，则将这个二级去除（即返回NULL）
-    names(splicePA_result) <- 1:length(splicePA_result)
+    names(splicePA_list) <- 1:length(splicePA_list)
     #重命名拼接PA的结果
-    splicePA <- splicePA_result
-    #赋值到splicePA方便命名
-    MS2 <- findmyCL::fappend(list1 = MS2 , list2 = splicePA)
-    #追加到MS2中
-    spliceFA_result <- purrr::map(.x = splicePA_result , .f = findmyCL::splice2FA_MLCL , FA = MS2$FA) %>%
+    spliceFA_list <- purrr::map(.x = splicePA_list , .f = findmyCL::splice2FA_MLCL , FA = MS2$FA) %>%
       findmyCL::deleteNULL()
     #用PA的拼接结果拼接2个FA，并且找另外一个FA能一起拼接成MLCL
-    if (length(spliceFA_result) == 0) {
+    if (length(spliceFA_list) == 0) {
       return(NULL)
     }
     #如果不能拼接成MLCL，则返回NULL
-    return(spliceFA_result)
+    names(spliceFA_list) <- 1:length(spliceFA_list)
+    #重命名拼接FA的结果
+    MS2 <- findmyCL::fappend(list1 = MS2 , list2 = splicePA_list)
+    MS2 <- findmyCL::fappend(list1 = MS2 , list2 = spliceFA_list)
+    names(MS2) <- c("MS2","PA","FA","splicePA","spliceFA")
+    #追加到MS2中
+    return(MS2)
     #返回最终结果
   }
   #假如既有PA，也有FA，则先拼接成一个PA，PA再由FA拼接,再找1个FA拼接成MLCL
