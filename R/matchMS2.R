@@ -132,6 +132,7 @@ check_HeadFAPA <- function(MS1 , MS2 , ppm = 30 , ms2checkresult_name){
     }
     #如果是MLCL（即有3条FA，则按照splicePAFA_MLCL的方法来拼接成心磷脂）
     if (ms2checkresult_name == "DLCL") {
+      MS2 <- findmyCL::splicePAFA_DLCL(MS2 = MS2 , MS1 = MS1)
       return(MS2)
     }
     #如果是DLCL（即有2条FA，则按照splicePAFA_DLCL的方法来拼接成心磷脂）
