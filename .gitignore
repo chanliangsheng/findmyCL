@@ -7,3 +7,5 @@
 *.mzml
 
 .Rhistory
+
+.Rproj.user/
