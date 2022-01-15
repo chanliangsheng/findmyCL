@@ -97,16 +97,10 @@ splicePA_MLCL <- function(PA , chain_double , oxygen , FA){
     return(NULL)
   }
   #如果PA和FA无法拼接成MLCL，则返回NULL
-
-<<<<<<< Updated upstream
-  PA_match_result <- PA[-store,]
-  rownames(PA_match_result) <- 1:length(PA_match_result[,1])
-=======
   if (length(store) != 0) {
     PA <- PA[-store,]
   }
-  #如果存在要去除的PA，则将其去除
-
+  #如果存在要去除的，则去除
   rownames(PA) <- 1:length(PA[,1])
 >>>>>>> Stashed changes
   #去除无法拼接成MLCL的PA，重命名行名
@@ -147,7 +141,7 @@ splice2FA_MLCL <- function(splicePA , FA){
     return(NULL)
   }
   #如果无法拼接成MLCL，则返回NULL
-  spliceFA_result <- plyr::rbind.fill(spliceFA_result)
+  spliceFA_result <- findmyCL::rbindList(list = spliceFA_result)
   #从列表转换为数据框，并且将所有结果行整合
   store <- list(spliceFA_result , splicePA[["Chain Length:Δ"]] , splicePA[["oxygen"]])
   #存储FA拼接的结果
