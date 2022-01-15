@@ -105,7 +105,7 @@ splicePA_MLCL <- function(PA , chain_double , oxygen , FA){
 
   #去除无法拼接成MLCL的PA，重命名行名
 
-  result_list <- list(PA_match_result , chain_double , oxygen)
+  result_list <- list(PA , chain_double , oxygen)
   names(result_list) <- c("PA" , "Chain Length:Δ" , "oxygen")
   #重命名结果
   return(result_list)
