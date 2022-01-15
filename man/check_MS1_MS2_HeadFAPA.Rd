@@ -4,12 +4,12 @@
 \alias{check_MS1_MS2_HeadFAPA}
 \title{Checking if a big MS1 have its corresponding MS2}
 \usage{
-check_MS1_MS2_HeadFAPA(MS1, ppm = 30, ms2checkresult_name)
+check_MS1_MS2_HeadFAPA(bigMS1, ppm = 30, ms2checkresult_name)
 }
 \arguments{
-\item{MS1}{list(1)}
-
 \item{ppm}{numeric(1)}
+
+\item{MS1}{list(1)}
 
 \item{pb}{1}
 }

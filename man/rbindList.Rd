@@ -2,7 +2,7 @@
 % Please edit documentation in R/rbindList.R
 \name{rbindList}
 \alias{rbindList}
-\title{Bind all dataframe in a list with repetiteve colnames.}
+\title{Bind all dataframe in a list with same colnames.}
 \usage{
 rbindList(list)
 }
@@ -13,5 +13,5 @@ rbindList(list)
 dataframe(1)
 }
 \description{
-Bind all dataframe in a list with repetiteve colnames.
+Bind all dataframe in a list with same colnames.
 }
