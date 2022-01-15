@@ -1,5 +1,5 @@
 #' @title Splice PA and FA from a MS2 and MS1 in MLCL
-#' @description A function to search PA and FA from MS2.If this MS1 can not search its 2 PA,delete this MS1(this MS1 may not have just one corresponding Cardiolipin).If this MS2 can search its PA but can not searth corresponding 2 FA or it can just match one FA,delete this MS2.
+#' @description MLCL:Monohydrolyzed cardiolipin(have 1 PA and 1FA).A function to search PA and FA from MS2.If this MS1 can not search its 2 PA,delete this MS1(this MS1 may not have just one corresponding Cardiolipin).If this MS2 can search its PA but can not search corresponding 2 FA or it can just match one FA,delete this MS2.
 #' @import purrr
 #' @import dplyr
 #' @param MS2 list(1),including MS2 information,PA&FA search result
@@ -96,11 +96,11 @@ splicePA_MLCL <- function(PA , chain_double , oxygen , FA){
   }
   #如果PA和FA无法拼接成MLCL，则返回NULL
 
-  PA <- PA[-store,]
-  rownames(PA) <- 1:length(PA[,1])
+  PA_match_result <- PA[-store,]
+  rownames(PA_match_result) <- 1:length(PA_match_result[,1])
   #去除无法拼接成MLCL的PA，重命名行名
 
-  result_list <- list(PA , chain_double , oxygen)
+  result_list <- list(PA_match_result , chain_double , oxygen)
   names(result_list) <- c("PA" , "Chain Length:Δ" , "oxygen")
   #重命名结果
   return(result_list)
@@ -249,7 +249,7 @@ splice3FA_MLCL <- function(FA , chain_double , oxygen){
 #' @export
 catchDataframe3Col <- function(row1 , row2 , row3 ,dataframe){
   dataframe <- cbind(dataframe[row1,] , dataframe[row2,] , dataframe[row3,] )
-  #合并4行为一行
+  #合并3行为一行
   return(dataframe)
 }
 #绑定一个数据框的某四行
