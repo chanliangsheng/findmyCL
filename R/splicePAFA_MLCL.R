@@ -135,7 +135,7 @@ splice2FA_MLCL <- function(splicePA , FA){
     return(NULL)
   }
   #如果FA没有配对成功，则返回空值
-  spliceFA_result <- plyr::rbind.fill(spliceFA_result)
+  spliceFA_result <- findmyCL::rbindList(list = spliceFA_result)
   #从列表转换为数据框，并且将所有结果行整合
 
   list <- findmyCL::turnDataframeList(dataframe = spliceFA_result)
