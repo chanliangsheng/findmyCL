@@ -102,7 +102,7 @@ splicePA_MLCL <- function(PA , chain_double , oxygen , FA){
   }
   #如果存在要去除的，则去除
   rownames(PA) <- 1:length(PA[,1])
->>>>>>> Stashed changes
+
   #去除无法拼接成MLCL的PA，重命名行名
 
   result_list <- list(PA_match_result , chain_double , oxygen)
