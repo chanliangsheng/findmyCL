@@ -188,11 +188,15 @@ findPAFA <- function(MS2 , ppm = 30){
     #计算允许的最大氧的个数
     PA_row <- which(PA$Oxform <= oxygen_limit)
     #能够符合规律的FA的行数
-    PA <- PA[PA_row ,]
-    #重新赋值到PA
+    if (length(PA_row) != 0) {
+      PA <- PA[PA_row ,]
+      #重新赋值到FA
+    }
+    #如果存在不符合规律的PA，则将其去除
     rownames(PA) <- 1:length(PA[,1])
     #重命名PA的行名
   }
+  #用限制条件限制PA的氧个数
   if (length(PA) == 0) {
     PA <- 0
   }
@@ -218,11 +222,16 @@ findPAFA <- function(MS2 , ppm = 30){
     #计算允许的最大氧的个数
     FA_row <- which(FA$Oxform <= oxygen_limit)
     #能够符合规律的FA的行数
-    FA <- FA[FA_row ,]
-    #重新赋值到FA
+    if (length(FA_row) != 0) {
+      FA <- FA[FA_row ,]
+      #重新赋值到FA
+    }
+    #如果存在不符合规律的FA，则将其去除
+
     rownames(FA) <- 1:length(FA[,1])
     #重命名FA的行名
   }
+  #用限制条件限制FA的氧个数
   if (length(FA) == 0) {
     FA <- 0
   }
