@@ -175,6 +175,23 @@ findPAFA <- function(MS2 , ppm = 30){
     colnames(PA)[(colnames_length + 1):result_name_length] <- c("aditive form" , "Chain Length:Δ" , "Oxform")
     colnames(PA)[1:colnames_length] <- rownames(MS2_dataframe)
     #改结果的列名
+    PA_chain <- PA$`Chain Length:Δ` %>%
+      strsplit(":") %>%
+      as.data.frame() %>%
+      t() %>%
+      as.data.frame()
+    #提取PA的碳数与不饱和度
+    colnames(PA_chain) <- c("Chain Length" , "Δ")
+    #重命名提取的PA的碳数与不饱和度
+    oxygen_limit <- ((as.numeric(PA_chain$`Chain Length`) - as.numeric(PA_chain$Δ)*2 - 2) / 2) %>%
+      ceiling()
+    #计算允许的最大氧的个数
+    PA_row <- which(PA$Oxform <= oxygen_limit)
+    #能够符合规律的FA的行数
+    PA <- PA[PA_row ,]
+    #重新赋值到PA
+    rownames(PA) <- 1:length(PA[,1])
+    #重命名PA的行名
   }
   if (length(PA) == 0) {
     PA <- 0
@@ -188,6 +205,23 @@ findPAFA <- function(MS2 , ppm = 30){
     colnames(FA)[(colnames_length + 1):result_name_length] <- c("aditive form" , "Chain Length:Δ" , "Oxform")
     colnames(FA)[1:colnames_length] <- rownames(MS2_dataframe)
     #改结果的列名
+    FA_chain <- FA$`Chain Length:Δ` %>%
+      strsplit(":") %>%
+      as.data.frame() %>%
+      t() %>%
+      as.data.frame()
+    #提取FA的碳数与不饱和度
+    colnames(FA_chain) <- c("Chain Length" , "Δ")
+    #重命名提取的FA的碳数与不饱和度
+    oxygen_limit <- ((as.numeric(FA_chain$`Chain Length`) - as.numeric(FA_chain$Δ)*2 - 1) / 2) %>%
+      ceiling()
+    #计算允许的最大氧的个数
+    FA_row <- which(FA$Oxform <= oxygen_limit)
+    #能够符合规律的FA的行数
+    FA <- FA[FA_row ,]
+    #重新赋值到FA
+    rownames(FA) <- 1:length(FA[,1])
+    #重命名FA的行名
   }
   if (length(FA) == 0) {
     FA <- 0
