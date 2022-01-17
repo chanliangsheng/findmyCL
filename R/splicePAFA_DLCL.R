@@ -31,9 +31,23 @@ splicePAFA_DLCL <- function(MS2 , MS1){
   }
   #如果没有PA，只有FA，则只进行FA的拼接，2个FA能组成DLCL就好
   if ((haveFA == 1) & (havePA == 5)){
-    return(NULL)
+    splicePA_list <- purrr::pmap(.l = list(as.list(MS1$`Chain Length:Δ`) , as.list(MS1$Oxform)) , .f = findmyCL::splicePA_DLCL , PA = MS2$PA) %>%
+      findmyCL::deleteNULL()
+    #进行PA的拼接，去除NUL
+    if (length(splicePA_list) == 0) {
+      return(NULL)
+    }
+    #如果这个二级的PA都无法拼接成DLCL，则将这个二级去除（即返回NULL）
+    names(splicePA_list) <- 1:length(splicePA_list)
+    #重命名拼接PA的结果
+    MS2 <- findmyCL::fappend(list1 = MS2 , list2 = splicePA_list)
+    #追加到MS2中
+    names(MS2) <- c("MS2","PA","FA","splicePA")
+    #重命名追加结果
+    return(MS2)
+    #返回结果
   }
-  #假如没有FA，则只拼接PA，但是拼接成MLCL需要一个PA+一个FA，若没有FA，则无法拼接成DLCL
+  #假如没有FA，则只拼接PA
   #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   if ((haveFA == 5) & (havePA == 5)){
     splicePA_list <- purrr::pmap(.l = list(as.list(MS1$`Chain Length:Δ`) , as.list(MS1$Oxform)) , .f = findmyCL::splicePA_DLCL , PA = MS2$PA) %>%
