@@ -47,7 +47,7 @@ matchMS2_main <- function(object , ppm = 30 ,ms2checkresult_name = "CL" ,workers
   #设置多线程使用核数
   # spliceResult <- furrr::future_pmap(.l = list(dealing_list , ms2checkresult_name))
   spliceResult <- furrr::future_map(.x = dealing_list , .f = findmyCL::check_MS1_MS2_HeadFAPA , ppm = ppm , ms2checkresult_name = ms2checkresult_name)
-  # spliceResult <- purrr::map(.x = dealing_list , .f = findmyCL::check_MS1_MS2_HeadFAPA , ppm = ppm)
+  # spliceResult <- purrr::map(.x = dealing_list , .f = findmyCL::check_MS1_MS2_HeadFAPA , ppm = ppm , ms2checkresult_name = ms2checkresult_name)
   #迭代输出结果,检查了头基并且拼接了心磷脂
   cat('\n')
   #换行
