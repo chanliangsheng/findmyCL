@@ -263,7 +263,7 @@ splice2FA_vector <- function(vector , MS2){
       help_dataframe2 <- 1:length(result1[["PA"]][,1]) %>%
         as.data.frame()
       colnames(help_dataframe2) <- 2
-
+      #创建两个相同的数据框，用于排列组合两个相同PA中的FA
       help_dataframe <- tidyr::crossing(help_dataframe1,help_dataframe2) %>%
         apply(1 , sort , decreasing = T) %>%
         t() %>%
