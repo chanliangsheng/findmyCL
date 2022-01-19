@@ -4,14 +4,14 @@
 \alias{check_MS1_MS2_HeadFAPA}
 \title{Checking if a big MS1 have its corresponding MS2}
 \usage{
-check_MS1_MS2_HeadFAPA(bigMS1, ppm = 30, ms2checkresult_name)
+check_MS1_MS2_HeadFAPA(bigMS1, ppm = 30, ms2checkresult_name, p)
 }
 \arguments{
 \item{ppm}{numeric(1)}
 
-\item{MS1}{list(1)}
+\item{p}{progress bar}
 
-\item{pb}{1}
+\item{MS1}{list(1)}
 }
 \description{
 checking if a aggregation which have MS1 and MS2 have PA or FA and splice PA and FA in cardiolipin.

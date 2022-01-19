@@ -12,6 +12,8 @@ matchMS2_main(object, ppm = 30, ms2checkresult_name = "CL", workers = 2)
 \item{ppm}{numeric(1)}
 
 \item{ms2checkresult_name}{character(1)}
+
+\item{workers}{numeric(1) Number of cores used by multithreading}
 }
 \description{
 search every MS2-checking for their PA&FA and splice them,every element use \code{\link[=check_MS1_MS2_HeadFAPA]{check_MS1_MS2_HeadFAPA()}} to search and splice.

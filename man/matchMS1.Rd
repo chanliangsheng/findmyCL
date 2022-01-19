@@ -14,7 +14,7 @@ matchMS1(object, ppm = 5, database = c("CL", "MLCL", "DLCL"))
 \item{database}{vector,choose a database you like to match your data,like("CL","MLCL","DLCL")}
 }
 \value{
-a findCL object
+a findmyCL object
 }
 \description{
 use database to select which MS1 is more likely to be a Cardiolipin.

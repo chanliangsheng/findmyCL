@@ -42,7 +42,7 @@ loadCentroidData(
 \item{rtcut}{numeric(1) half peak width to cut the MS2}
 }
 \value{
-a findCL object
+a findmyCL object
 }
 \description{
 A function use function xcmsSet of  package "xcms" and "MSnbase" for deceting the peak of mzml file in centroid mode.We set some defaults in this function like ppm and snthresh.If your data format is not centroid,you can use \code{\link[=profilePretreat]{profilePretreat()}}
