@@ -285,10 +285,15 @@ splice2FA_vector <- function(vector , MS2){
       t() %>%
       as.data.frame()
     #存储PA对应的加和形式
-    colnames(PA_aditive_form) <- rep("PA aditive form" , 2)
-    #重命名PA的加和形式的列名
-    combine_FA <- cbind(combine_FA , PA_aditive_form)
-    #将PA的加和形式加入FA拼接结果中
+    combine_FA_1 <- combine_FA[ , 1:10] %>%
+      cbind(PA_aditive_form[,1])
+    combine_FA_2 <- combine_FA[ , 11:20] %>%
+      cbind(PA_aditive_form[,2])
+    #加入PA的加和形式到FA拼接结果中
+    combine_FA <- cbind(combine_FA_1 , combine_FA_2)
+    #整合FA拼接结果
+    colnames(combine_FA) <- rep(c(result_colname , "PA aditive form") , 2)
+    #重命名结果
     return(combine_FA)
     #返回结果
   }
