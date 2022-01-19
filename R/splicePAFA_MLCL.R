@@ -167,6 +167,13 @@ splice2FA_MLCL_main <- function(splicePA_dataframe , FA){
   #利用splice2PA函数搜索这个PA能由FA中的哪两个FA组成
   spliceFA <- result[["PA"]]
   #去除拼接的结果，结果位于PA的槽中
+
+  PA_aditive_form <- splicePA_dataframe$`aditive form` %>%
+    as.data.frame()
+  colnames(PA_aditive_form) <- "PA aditive form"
+  spliceFA <- cbind(spliceFA , PA_aditive_form)
+  #在FA拼接结果中加入对应PA的加和形式的信息
+
   return(spliceFA)
   #返回结果
 }
