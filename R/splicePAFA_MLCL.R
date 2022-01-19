@@ -165,6 +165,10 @@ splice2FA_MLCL_main <- function(splicePA_dataframe , FA){
   #如果输入的是一个向量，则需要先转换为数据框
   result <- findmyCL::splice2PA(PA = FA , chain_double = splicePA_dataframe$`Chain Length:Δ` , oxygen = splicePA_dataframe$Oxform)
   #利用splice2PA函数搜索这个PA能由FA中的哪两个FA组成
+  if (is.null(result)) {
+    return(NULL)
+  }
+  #如果这个PA无法由FA组成，则返回NULL，如果可以由FA组成，则继续进行下面的步骤
   spliceFA <- result[["PA"]]
   #去除拼接的结果，结果位于PA的槽中
 
