@@ -2,10 +2,10 @@
 % Please edit documentation in R/defineMyClass.R
 \name{defineMyClass}
 \alias{defineMyClass}
-\title{A function to define how the data store in the findCL object}
+\title{A function to define how the data store in the findmyCL object}
 \usage{
 defineMyClass()
 }
 \description{
-A function to define how the data store in the findCL object
+A function to define how the data store in the findmyCL object
 }

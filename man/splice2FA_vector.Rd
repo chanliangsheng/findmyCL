@@ -7,9 +7,9 @@
 splice2FA_vector(vector, MS2)
 }
 \arguments{
-\item{vector}{vector(1)}
+\item{vector}{vector(1),a PA splice-result.}
 
-\item{MS2}{list(1)}
+\item{MS2}{list(1),including MS2 message,PA,FA.}
 }
 \description{
 Splice 2 FA from the result in PA-splicing
