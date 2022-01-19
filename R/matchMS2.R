@@ -6,6 +6,8 @@
 #' @import purrr
 #' @import furrr
 #' @import future
+#' @import dplyr
+#' @import progressr
 #' @return
 #' @export
 matchMS2 <- function(object , ppm = 30 , workers = 2){
@@ -37,6 +39,7 @@ matchMS2 <- function(object , ppm = 30 , workers = 2){
 #' @param object findmyCLclass(1)
 #' @param ppm numeric(1)
 #' @param ms2checkresult_name character(1)
+#' @param workers numeric(1) Number of cores used by multithreading
 #' @export
 matchMS2_main <- function(object , ppm = 30 ,ms2checkresult_name = "CL" ,workers = 2){
   dealing_list <- object@ms2CheckResult[[ms2checkresult_name]]
@@ -46,9 +49,13 @@ matchMS2_main <- function(object , ppm = 30 ,ms2checkresult_name = "CL" ,workers
   future::plan(multisession , workers = workers)
   #设置多线程使用核数
   # spliceResult <- furrr::future_pmap(.l = list(dealing_list , ms2checkresult_name))
-  spliceResult <- furrr::future_map(.x = dealing_list , .f = findmyCL::check_MS1_MS2_HeadFAPA , ppm = ppm , ms2checkresult_name = ms2checkresult_name)
-  # spliceResult <- purrr::map(.x = dealing_list , .f = findmyCL::check_MS1_MS2_HeadFAPA , ppm = ppm , ms2checkresult_name = ms2checkresult_name)
-  #迭代输出结果,检查了头基并且拼接了心磷脂
+  with_progress({
+    p <- progressr::progressor(steps = length(dealing_list))
+    #设置进度条
+    spliceResult <- furrr::future_map(.x = dealing_list , .f = findmyCL::check_MS1_MS2_HeadFAPA , ppm = ppm , ms2checkresult_name = ms2checkresult_name , p = p)
+    # spliceResult <- purrr::map(.x = dealing_list , .f = findmyCL::check_MS1_MS2_HeadFAPA , ppm = ppm , ms2checkresult_name = ms2checkresult_name)
+    #迭代输出结果,检查了头基并且拼接了心磷脂
+  })
   cat('\n')
   #换行
   message("Done!")
@@ -69,9 +76,11 @@ matchMS2_main <- function(object , ppm = 30 ,ms2checkresult_name = "CL" ,workers
 #' @description checking if a aggregation which have MS1 and MS2 have PA or FA and splice PA and FA in cardiolipin.
 #' @param MS1 list(1)
 #' @param ppm numeric(1)
-#' @param pb 1
+#' @param p progress bar
 #' @export
-check_MS1_MS2_HeadFAPA <- function(bigMS1, ppm = 30 , ms2checkresult_name){
+check_MS1_MS2_HeadFAPA <- function(bigMS1, ppm = 30 , ms2checkresult_name , p){
+  p()
+  #显示进度条
   MS1_dealing <- bigMS1[-1]
   #去除一级的信息
   result <- purrr::map(.x = MS1_dealing,.f = findmyCL::check_HeadFAPA,ppm = ppm,MS1 = bigMS1$MS1 , ms2checkresult_name = ms2checkresult_name)
