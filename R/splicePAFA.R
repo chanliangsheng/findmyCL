@@ -236,8 +236,8 @@ splice2FA_main <- function(splicePA_dataframe , MS2){
 #配对单个PA配对结果的数据框是否有FA,输入的是PA配对之后的数据框，成对出现， 如果没有FA配对成功 or 两条PA只有一条PA能拼出FA，返回空值
 
 #' @title Splice 2 FA from the result in PA-splicing
-#' @param vector vector(1)
-#' @param MS2 list(1)
+#' @param vector vector(1),a PA splice-result.
+#' @param MS2 list(1),including MS2 message,PA,FA.
 #' @export
 splice2FA_vector <- function(vector , MS2){
   result1 <- findmyCL::splice2PA(PA = MS2$FA , chain_double = vector[4]  , oxygen = vector[5])
@@ -254,7 +254,7 @@ splice2FA_vector <- function(vector , MS2){
       combine_FA <- tidyr::crossing(result1[["PA"]] , result2[["PA"]])
       #组合FA
     }
-    #如果两个PA的chain：▲不一样或者氧原子个数不一样（就是两个PA是不一样的PA），则进行FA的任意组合
+    #如果两个PA的chain：▲不一样或者氧原子个数不一样（就是两个PA是不一样的PA），则进行2组的FA的任意组合
     if ((vector[4] == vector[9]) && (vector[5] == vector[10])) {
       help_dataframe1 <- 1:length(result1[["PA"]][,1]) %>%
         as.data.frame()
@@ -276,11 +276,26 @@ splice2FA_vector <- function(vector , MS2){
       combine_FA <- cbind(dataframe1 , dataframe2)
       #将两个结果中对应的行行组合在一起，形成一个大数据框
     }
-    #如果两个PA的chain：▲和氧原子个数都一，则进行FA的任意组合（重复的去除）
+    #如果两个PA的chain：▲和氧原子个数都一样，则进行FA的任意组合（重复的去除）
     colnames(combine_FA) <- rep(result_colname , 2)
     #重命名结果
-    as.data.frame(combine_FA) %>%
-     return()
+    combine_FA <- as.data.frame(combine_FA)
+    #将结果转换为数据框
+    PA_aditive_form <- c(vector[3],vector[8]) %>%
+      t() %>%
+      as.data.frame()
+    #存储PA对应的加和形式
+    combine_FA_1 <- combine_FA[ , 1:10] %>%
+      cbind(PA_aditive_form[,1])
+    combine_FA_2 <- combine_FA[ , 11:20] %>%
+      cbind(PA_aditive_form[,2])
+    #加入PA的加和形式到FA拼接结果中
+    combine_FA <- cbind(combine_FA_1 , combine_FA_2)
+    #整合FA拼接结果
+    colnames(combine_FA) <- rep(c(result_colname , "PA aditive form") , 2)
+    #重命名结果
+    return(combine_FA)
+    #返回结果
   }
   #如果都能拼接成FA，则组合所有FA
 }

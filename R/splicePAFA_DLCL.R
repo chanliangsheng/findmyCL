@@ -116,7 +116,7 @@ splicePA2FA_DLCL <- function(splicePA , FA){
   list <- findmyCL::turnDataframeList(dataframe = splicePA[["PA"]])
   #将数据框转换为列表便于多线程
   spliceFA_result <- purrr::map(.x = list , .f = findmyCL::splice2FA_MLCL_main , FA = FA)
-  #求由FA拼接成PA的结果
+  #求由FA拼接成PA的结果,由于这里拼接MLCL的PA的FA的时候，FA的结果已经加入了PA的信息，所以就不需要额外加入PA的信息了
   spliceFA_result <- findmyCL::deleteNULL(spliceFA_result)
   #去除NULL
   if (length(spliceFA_result) == 0) {
