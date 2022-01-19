@@ -28,7 +28,7 @@ loadCentroidData <- function(file , ppm = 5 , peakwidth = c(5, 30) , prefilter =
     as.data.frame()
   peak$rtmax <- peak$rt + rtcut
   peak$rtmin <- peak$rt - rtcut
-  #rt加减定义的半峰宽
+  #rt加减定义的半峰宽,这里rtmin可能为负值，不影响后续进展，这里作用是判断哪些二级的保留时间落入一级的保留时间中，如果落入为[负数，正数]中，则必落入[0，正数]中.
   rawdata@peaks <- as.matrix(peak)
   #赋值回原来对象
   message("Done!")
