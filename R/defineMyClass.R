@@ -1,4 +1,4 @@
-#' @title A function to define how the data store in the findCL object
+#' @title A function to define how the data store in the findmyCL object
 #' @export
 defineMyClass <- function(){
   setClass(Class = "findmyCLclass",

@@ -8,7 +8,7 @@
 #' @param ppm numeric(1) defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when match our database.Default is 5.
 #' @param database vector,choose a database you like to match your data,like("CL","MLCL","DLCL")
 #' @seealso [loadCentroidData()] create a findCL object to be an input for this function
-#' @return a findCL object
+#' @return a findmyCL object
 #' @export
 #' @examples
 #' setwd("D:/mzml file")

@@ -14,12 +14,12 @@
 #' @param MS2cutRadio numeric(1) cut the last intensity in MS2
 #' @param rtcut numeric(1) half peak width to cut the MS2
 #' @seealso [profilePretreat()] turn a mzml file in profile mode to  centroid mode for the input of this function
-#' @return a findCL object
+#' @return a findmyCL object
 #' @export
 loadCentroidData <- function(file , ppm = 5 , peakwidth = c(5, 30) , prefilter = c(4, 5000) , snthresh = 3 , mzdiff = -0.001 , noise= 0 , integrate = 1L , fitgauss = FALSE , MS2cutRadio = 0.1 , rtcut = 6){
 
   defineMyClass()
-  #定义findCL类
+  #定义findmyCL类
 
   message("Picking peak...")
   rawdata <- xcmsSet(file, method = 'centWave', ppm = ppm,peakwidth = peakwidth,prefilter = prefilter,snthresh = snthresh,mzdiff = mzdiff,noise= noise,mzCenterFun = "wMean",integrate = integrate,fitgauss = fitgauss,mslevel = 1)
