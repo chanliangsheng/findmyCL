@@ -18,7 +18,17 @@
 #' @export
 loadCentroidData <- function(file , ppm = 5 , peakwidth = c(5, 30) , prefilter = c(4, 5000) , snthresh = 3 , mzdiff = -0.001 , noise= 0 , integrate = 1L , fitgauss = FALSE , MS2cutRadio = 0.1 , rtcut = 6){
 
-  defineMyClass()
+  setClass(Class = "findmyCLclass",
+           slots = list(path = "character",
+                        file = "character",
+                        MS2 = "MSnExp",
+                        xcms = "xcmsSet",
+                        loadCentroidData_parameter = "list",
+                        ms1MatchResult = "list",
+                        ms2CheckResult = "list",
+                        noMS2 = "list",
+                        ms2MatchResult = "list"),
+           package = "findmyCL")
   #定义findmyCL类
 
   message("Picking peak...")
