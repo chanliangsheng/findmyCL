@@ -1,8 +1,8 @@
 #' @title Checking which MS1 have MS2,from[matchMS1()]
 #' @description Checking if a MS1 have corresponding MS2,use this function after [matchMS1()].A MS1 may have more than 1 MS2.The result is stored in ms2CheckResult.
-#' @param object a findCL object
+#' @param object a findmyCL object
 #' @param ppm numeric(1) defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 5.
-#' @return a findCL object
+#' @return a findmyCL object
 #' @export
 checkMS2 <- function(object , ppm = 5){
   dealing_name <- as.list(names(object@ms1MatchResult))
@@ -27,6 +27,12 @@ checkMS2 <- function(object , ppm = 5){
 }
 #识别一个对象中的matchMS1的结果是否有MS2的配对结果
 
+#' @title Check every MS1 with its MS2 in a MS1-result
+#' @param object a findmyCL object
+#' @param ppm numeric(1) defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 5.
+#' @param ms1matchresult_name character(1)
+#' @return list(1)
+#' @export
 checkMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
   nrow <- length(object@MS2@assayData)
   ncol <- 3
@@ -59,6 +65,13 @@ checkMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
   return(result)
 }
 #为每一个matchMS1的结果比如“CL”中的一级峰识别是否存在二级，并整合为列表
+
+#' @title Check which MS1 has no MS2 in every MS1-match-result
+#' @param object a findmyCL object
+#' @param ppm numeric(1) defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 5.
+#' @param ms1matchresult_name character(1)
+#' @return list(1)
+#' @export
 checknoMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
   nrow <- length(object@MS2@assayData)
   ncol <- 3
@@ -93,6 +106,18 @@ checknoMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
 }
 #为每一个matchMS1的结果比如“CL”中不存在二级的一级，并整合为列表
 
+#' @title Search which MS1 have its MS2
+#' @param object a findmyCL object
+#' @param vector vector(1)
+#' @param vector_mz_column numeric(1)
+#' @param vector_rtmin_column numeric(1)
+#' @param vector_rtmax_column numeric(1)
+#' @param ppm numeric(1),defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 5.
+#' @param MS2 dataframe(1)
+#' @param MS2_column numeric(1)
+#' @param pb process bar
+#' @return list(1)
+#' @export
 searchMS2 <- function(object , vector , vector_mz_column , vector_rtmin_column,vector_rtmax_column , ppm = 5 , MS2 , MS2_column , pb){
   pb$tick()$print()
   #显示进度条
@@ -132,6 +157,20 @@ searchMS2 <- function(object , vector , vector_mz_column , vector_rtmin_column,v
   }
 }
 #识别单个一级峰是否存在二级，并整合为列表，可能会有多个二级
+
+
+#' @title Search which MS1 have no MS2
+#' @param object a findmyCL object
+#' @param vector vector(1)
+#' @param vector_mz_column numeric(1)
+#' @param vector_rtmin_column numeric(1)
+#' @param vector_rtmax_column numeric(1)
+#' @param ppm numeric(1),defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 5.
+#' @param MS2 dataframe(1)
+#' @param MS2_column numeric(1)
+#' @param pb process bar
+#' @return list(1)
+#' @export
 searchNoMS2 <- function(object , vector , vector_mz_column , vector_rtmin_column,vector_rtmax_column , ppm = 5 , MS2 , MS2_column , pb){
   pb$tick()$print()
   #显示进度条
@@ -155,6 +194,11 @@ searchNoMS2 <- function(object , vector , vector_mz_column , vector_rtmin_column
   }
 }
 
+#' @title Catch MS2
+#' @param object a findmyCL object
+#' @param MS2_name character(1)
+#' @return Spectrum2
+#' @export
 catchMS2 <- function(object , MS2_name){
   object@MS2@assayData[[MS2_name]] %>%
     return()
