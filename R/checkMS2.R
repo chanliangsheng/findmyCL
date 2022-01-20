@@ -31,6 +31,7 @@ checkMS2 <- function(object , ppm = 5){
 #' @param object a findmyCL object
 #' @param ppm numeric(1) defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 5.
 #' @param ms1matchresult_name character(1)
+#' @import MSnbase
 #' @return list(1)
 #' @export
 checkMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
@@ -39,8 +40,8 @@ checkMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
   database <- as.data.frame(matrix(nrow = nrow,ncol = ncol))
   names(database) <- c("name","precursorMz","rt")
   #创建数据库框架
-  database$name <- names(precursorMz(object@MS2))
-  database$precursorMz <- precursorMz(object@MS2)
+  database$name <- names(MSnbase::precursorMz()(object@MS2))
+  database$precursorMz <- MSnbase::precursorMz()(object@MS2)
   database$rt <- rtime(object@MS2)
   #创建MS2
 
