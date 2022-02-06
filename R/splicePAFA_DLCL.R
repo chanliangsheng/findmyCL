@@ -16,10 +16,10 @@ splicePAFA_DLCL <- function(MS2 , MS1){
   #计算MS2是没有PA还是没有FA，还是两者都有
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   if ((havePA == 1) & (haveFA == 5)){
-    splicePA_list <- purrr::pmap(.l = list(as.list(MS1$`Chain Length:Δ`) , as.list(MS1$Oxform)) , .f = findmyCL::splice2FA_DLCL , FA = MS2$FA) %>%
+    spliceFA_list <- purrr::pmap(.l = list(as.list(MS1$`Chain Length:Δ`) , as.list(MS1$Oxform)) , .f = findmyCL::splice2FA_DLCL , FA = MS2$FA) %>%
       findmyCL::deleteNULL()
     #进行PA的拼接，去除NULL
-    if (length(splicePA_list) == 0) {
+    if (length(spliceFA_list) == 0) {
       return(NULL)
     }
     #如果这个二级的FA都无法拼接成DLCL，则将这个二级去除（即返回NULL）
