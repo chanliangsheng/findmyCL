@@ -40,9 +40,17 @@ checkMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
   database <- as.data.frame(matrix(nrow = nrow,ncol = ncol))
   names(database) <- c("name","precursorMz","rt")
   #创建数据库框架
-  database$name <- names(MSnbase::precursorMz(object@MS2))
-  database$precursorMz <- MSnbase::precursorMz(object@MS2)
-  database$rt <- rtime(object@MS2)
+  MS2 <- object@MS2@assayData %>%
+    as.list()
+  database$name <- names(MS2)
+  precursorMz <- MS2 %>%
+    purrr::map(function(x) x@precursorMz) %>%
+    as.numeric()
+  rt <- MS2 %>%
+    purrr::map(function(x) x@rt) %>%
+    as.numeric()
+  database$precursorMz <- precursorMz
+  database$rt <- rt
   #创建MS2
 
   data <-  object@ms1MatchResult[[ms1matchresult_name]]
@@ -79,9 +87,17 @@ checknoMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
   database <- as.data.frame(matrix(nrow = nrow,ncol = ncol))
   names(database) <- c("name","precursorMz","rt")
   #创建数据库框架
-  database$name <- names(precursorMz(object@MS2))
-  database$precursorMz <- precursorMz(object@MS2)
-  database$rt <- rtime(object@MS2)
+  MS2 <- object@MS2@assayData %>%
+    as.list()
+  database$name <- names(MS2)
+  precursorMz <- MS2 %>%
+    purrr::map(function(x) x@precursorMz) %>%
+    as.numeric()
+  rt <- MS2 %>%
+    purrr::map(function(x) x@rt) %>%
+    as.numeric()
+  database$precursorMz <- precursorMz
+  database$rt <- rt
   #创建MS2
 
   data <-  object@ms1MatchResult[[ms1matchresult_name]]
