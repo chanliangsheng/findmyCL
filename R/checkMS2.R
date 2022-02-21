@@ -15,6 +15,9 @@ checkMS2 <- function(object , ppm = 5){
   names(ms2CheckResult) <- dealing_name
   names(noMS2) <- dealing_name
   #重命名
+  ms2CheckResult <- findmyCL::deleteNULL(ms2CheckResult)
+  noMS2 <- findmyCL::deleteNULL(noMS2)
+
   ms2CheckResult <- append(ms2CheckResult,ppm)
   names(ms2CheckResult)[length(ms2CheckResult)] <- "ppm"
   noMS2 <- append(noMS2,ppm)
@@ -68,6 +71,10 @@ checkMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
   #换行
   result <- findmyCL::deleteNULL(result)
   #去除空值
+  if (length(result) == 0) {
+    return(NULL)
+  }
+  #如果整个CL或者MLCL或者DLCL都没有二级，则返回NULL
   names(result) <- 1:length(result)
   #重命名结果
   message("Done!")
