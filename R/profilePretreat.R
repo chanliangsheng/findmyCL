@@ -24,7 +24,7 @@ profilePretreat <- function(
   output_file){
 
   message("Reaing...")
-  data_prof_inmemory <- readMSData(file, mode = "onDisk", centroided = FALSE , smoothed. = FALSE)
+  data_prof_inmemory <- readMSData(file, mode = "inMemory", centroided = FALSE , smoothed. = FALSE)
   message("Done!")
   #读取mzml文件，模式为inMemory，先只提取一级峰
 
