@@ -1,6 +1,6 @@
 loadTestData <- function(){
-  rawdata <- findmyCL::loadCentroidData(file = "50X_NEG_CID_150-2000_3uL(centroid).mzml") %>%
-    findmyCL::matchMS1(ppm = 10) %>%
-    findmyCL::checkMS2(ppm = 5) %>%
-    return()
+  findmyCL::defineMyClass()
+  load(file = "D:/findmyCL/data/MS2matchresult.rdata")
+  #载入数据
+  return(MS2matchresult)
 }

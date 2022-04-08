@@ -34,7 +34,6 @@ checkMS2 <- function(object , ppm = 5){
 #' @param object a findmyCL object
 #' @param ppm numeric(1) defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 5.
 #' @param ms1matchresult_name character(1)
-#' @import MSnbase
 #' @return list(1)
 #' @export
 checkMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
@@ -58,15 +57,15 @@ checkMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
 
   data <-  object@ms1MatchResult[[ms1matchresult_name]]
   #需要计算的数据
-  data_deal <- t(data)
-  vector <- lapply(seq_len(ncol(data_deal)), function(i) data_deal[,i])
+  list <- findmyCL::turnDataframeList(dataframe = data)
   #将数据框转换为列表便于多线程
   paste0("Checking with " ,ms1matchresult_name ," ...") %>%
     message()
-  pb <- dplyr::progress_estimated(length(vector))
+  #提示信息
+  pb <- dplyr::progress_estimated(length(list))
   #设置进度条
-  result <- purrr::map(.x = vector,.f = findmyCL::searchMS2,object = object , vector_mz_column = 1 , vector_rtmin_column = 5,vector_rtmax_column = 6, ppm = ppm , MS2 = database , MS2_column = 2 , pb = pb)
-  #批量处理
+  result <- purrr::map(.x = list,.f = findmyCL::searchMS2,object = object , vector_mz_column = 1 , vector_rtmin_column = 5,vector_rtmax_column = 6, ppm = ppm , MS2 = database , MS2_column = 2 , pb = pb)
+  #批量检查是否有二级
   cat("\n")
   #换行
   result <- findmyCL::deleteNULL(result)
@@ -109,15 +108,15 @@ checknoMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
 
   data <-  object@ms1MatchResult[[ms1matchresult_name]]
   #需要计算的数据
-  data_deal <- t(data)
-  vector <- lapply(seq_len(ncol(data_deal)), function(i) data_deal[,i])
+  list <- findmyCL::turnDataframeList(dataframe = data)
   #将数据框转换为列表便于多线程
   paste0("Checking no MS2 with " ,ms1matchresult_name ," ...") %>%
     message()
-  pb <- dplyr::progress_estimated(length(vector))
+  #提示信息
+  pb <- dplyr::progress_estimated(length(list))
   #设置进度条
-  result <- purrr::map(.x = vector,.f = findmyCL::searchNoMS2,object = object , vector_mz_column = 1 , vector_rtmin_column = 5,vector_rtmax_column = 6, ppm = ppm , MS2 = database , MS2_column = 2 , pb = pb)
-  #批量处理
+  result <- purrr::map(.x = list,.f = findmyCL::searchNoMS2,object = object , vector_mz_column = 1 , vector_rtmin_column = 5,vector_rtmax_column = 6, ppm = ppm , MS2 = database , MS2_column = 2 , pb = pb)
+  #批量检查没有二级的心磷脂
   cat("\n")
   #换行
   result <- findmyCL::deleteNULL(result)
@@ -137,7 +136,7 @@ checknoMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
 #' @param vector_rtmin_column numeric(1)
 #' @param vector_rtmax_column numeric(1)
 #' @param ppm numeric(1),defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 5.
-#' @param MS2 dataframe(1)
+#' @param MS2 dataframe(1),the information is from the mzml file itself,
 #' @param MS2_column numeric(1)
 #' @param pb process bar
 #' @return list(1)
@@ -147,25 +146,28 @@ searchMS2 <- function(object , vector , vector_mz_column , vector_rtmin_column,v
   #显示进度条
   min_match <- MS2[,MS2_column] - MS2[,MS2_column]*ppm/1000000
   max_match <- MS2[,MS2_column] + MS2[,MS2_column]*ppm/1000000
-  #计算数据库配对的最小值和最大值
+  #计算二级数据库配对的最小值和最大值
   match_number_mz <- which((as.numeric(vector[vector_mz_column]) > min_match) & (as.numeric(vector[vector_mz_column]) < max_match))
-  #满足一级mz在二级的前体离子的波动范围的二级
+  #求满足一级mz在二级的前体离子的波动范围的二级
   match_number_rt <- which((as.numeric(vector[vector_rtmin_column]) < MS2$rt) &(as.numeric(vector[vector_rtmax_column]) > MS2$rt))
-  #满足二级的保留时间在一级保留时间的波动范围内的二级
+  #求满足二级的保留时间在一级保留时间的波动范围内的二级
   match_number <- intersect(match_number_mz,match_number_rt)
-  #求交集，配对
+  #求满足两种情况的二级的交集
   if (length(match_number) == 0) {
     return(NULL)
   }
-  #如果没有二级，返回空值
+  #如果没有两种情况都满足的二级，返回空值
   if (length(match_number) > 0) {
+    #如果有满足两种情况的二级
+
     MS2_index <- MS2[match_number,][1]
     MS2_index <- as.list(t(MS2_index))
     #获取对应的MS2的索引
     result <- purrr::map(.x = MS2_index,.f = findmyCL::catchMS2,object = object)
-    #提取匹配到的二级的结果
+    #提取匹配到的二级
 
     store <- list()
+    #空列表存储结果
     vector <- findmyCL::deleteNA(vector = vector)
     #将一级配对结果中多余的NA去除
     MS1 <- findmyCL::turnVectorDataframe(vector = as.data.frame(t(as.matrix(vector))))

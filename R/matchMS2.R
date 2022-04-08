@@ -46,20 +46,21 @@ matchMS2_main <- function(object , ppm = 30 ,ms2checkresult_name = "CL" ,workers
   #将待处理的列表输出
   paste0("Searing and splicing from: ",ms2checkresult_name) %>%
     message()
+  #提示信息
   future::plan(multisession , workers = workers)
   #设置多线程使用核数
-  # spliceResult <- furrr::future_pmap(.l = list(dealing_list , ms2checkresult_name))
+
   with_progress({
     p <- progressr::progressor(steps = length(dealing_list))
     #设置进度条
     spliceResult <- furrr::future_map(.x = dealing_list , .f = findmyCL::check_MS1_MS2_HeadFAPA , ppm = ppm , ms2checkresult_name = ms2checkresult_name , p = p)
-    # spliceResult <- purrr::map(.x = dealing_list , .f = findmyCL::check_MS1_MS2_HeadFAPA , ppm = ppm , ms2checkresult_name = ms2checkresult_name)
     #迭代输出结果,检查了头基并且拼接了心磷脂
   })
+
   cat('\n')
   #换行
   message("Done!")
-  #提示信息
+  #提示信息(完成了这一组心磷脂的拼接)
   spliceResult <- findmyCL::deleteNULL(list = spliceResult)
   #去除空值
   if (length(spliceResult) == 0) {
@@ -81,9 +82,9 @@ matchMS2_main <- function(object , ppm = 30 ,ms2checkresult_name = "CL" ,workers
 check_MS1_MS2_HeadFAPA <- function(bigMS1, ppm = 30 , ms2checkresult_name , p){
   p()
   #显示进度条
-  MS1_dealing <- bigMS1[-1]
-  #去除一级的信息
-  result <- purrr::map(.x = MS1_dealing,.f = findmyCL::check_HeadFAPA,ppm = ppm,MS1 = bigMS1$MS1 , ms2checkresult_name = ms2checkresult_name)
+  MS2_dealing <- bigMS1[-1]
+  #去除一级的信息，剩下的是二级的信息
+  result <- purrr::map(.x = MS2_dealing,.f = findmyCL::check_HeadFAPA,ppm = ppm,MS1 = bigMS1$MS1 , ms2checkresult_name = ms2checkresult_name)
   #批量检查所有一个MS1中的所有MS2是否有头基和PA、FA，如果没有头基，则返回NULL，如果有头基但是没有PA和FA，也返回NULL
 
   result <- findmyCL::deleteNULL(list = result)
