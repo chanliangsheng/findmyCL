@@ -29,7 +29,7 @@ searchMS2(
 
 \item{ppm}{numeric(1),defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 5.}
 
-\item{MS2}{dataframe(1)}
+\item{MS2}{dataframe(1),the information is from the mzml file itself,}
 
 \item{MS2_column}{numeric(1)}
 
