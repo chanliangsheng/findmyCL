@@ -1,10 +1,10 @@
 #' @title Checking which MS1 have MS2,from[matchMS1()]
 #' @description Checking if a MS1 have corresponding MS2,use this function after [matchMS1()].A MS1 may have more than 1 MS2.The result is stored in ms2CheckResult.
 #' @param object a findmyCL object
-#' @param ppm numeric(1) defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 5.
+#' @param ppm numeric(1) defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 0.5(500000/1000000)
 #' @return a findmyCL object
 #' @export
-checkMS2 <- function(object , ppm = 5){
+checkMS2 <- function(object , ppm = 500000){
   dealing_name <- as.list(names(object@ms1MatchResult))
   dealing_name <- head(dealing_name,-1)
   #转换为列表方便迭代操作,去除ppm属性
@@ -32,11 +32,11 @@ checkMS2 <- function(object , ppm = 5){
 
 #' @title Check every MS1 with its MS2 in a MS1-result
 #' @param object a findmyCL object
-#' @param ppm numeric(1) defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 5.
+#' @param ppm numeric(1) defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 0.5.
 #' @param ms1matchresult_name character(1)
 #' @return list(1)
 #' @export
-checkMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
+checkMS2_main <- function(object , ppm = 500000 , ms1matchresult_name = "CL"){
   nrow <- length(object@MS2@assayData)
   ncol <- 3
   database <- as.data.frame(matrix(nrow = nrow,ncol = ncol))
@@ -64,7 +64,7 @@ checkMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
   #提示信息
   pb <- dplyr::progress_estimated(length(list))
   #设置进度条
-  result <- purrr::map(.x = list,.f = findmyCL::searchMS2,object = object , vector_mz_column = 1 , vector_rtmin_column = 5,vector_rtmax_column = 6, ppm = ppm , MS2 = database , MS2_column = 2 , pb = pb)
+  result <- purrr::map(.x = list,.f = findmyCL::searchMS2,object = object , vector_mz_column = 1 , vector_rtmin_column = 5,vector_rtmax_column = 6, ppm = 0.5 , MS2 = database , MS2_column = 2 , pb = pb)
   #批量检查是否有二级
   cat("\n")
   #换行
@@ -83,11 +83,11 @@ checkMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
 
 #' @title Check which MS1 has no MS2 in every MS1-match-result
 #' @param object a findmyCL object
-#' @param ppm numeric(1) defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 5.
+#' @param ppm numeric(1) defining the maximal tolerated m/z deviation in consecutive scans in parts per million (ppm) for the initial ROI definition when matching with the precursorMz of MS2,default is 0.5.
 #' @param ms1matchresult_name character(1)
 #' @return list(1)
 #' @export
-checknoMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
+checknoMS2_main <- function(object , ppm = 500000 , ms1matchresult_name = "CL"){
   nrow <- length(object@MS2@assayData)
   ncol <- 3
   database <- as.data.frame(matrix(nrow = nrow,ncol = ncol))
@@ -141,7 +141,7 @@ checknoMS2_main <- function(object , ppm = 5 , ms1matchresult_name = "CL"){
 #' @param pb process bar
 #' @return list(1)
 #' @export
-searchMS2 <- function(object , vector , vector_mz_column , vector_rtmin_column,vector_rtmax_column , ppm = 5 , MS2 , MS2_column , pb){
+searchMS2 <- function(object , vector , vector_mz_column , vector_rtmin_column,vector_rtmax_column , ppm = 0.5 , MS2 , MS2_column , pb){
   pb$tick()$print()
   #显示进度条
   min_match <- MS2[,MS2_column] - MS2[,MS2_column]*ppm/1000000
