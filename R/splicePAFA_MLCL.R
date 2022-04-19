@@ -42,9 +42,22 @@ splicePAFA_MLCL <- function(MS2 , MS1){
     findmyCL::deleteNULL()
     #去除NULL
     if (length(splicePA_list) == 0) {
-      return(NULL)
+      spliceFA <- purrr::pmap(.l = list(as.list(MS1$`Chain Length:Δ`) , as.list(MS1$Oxform)) , .f = findmyCL::splice3FA_MLCL , FA = MS2$FA) %>%
+        findmyCL::deleteNULL()
+      if (length(spliceFA) == 0) {
+        return(NULL)
+      }
+      #如果无法由PA拼接成心磷脂,则进行3个FA的拼接,去除空值，如果FA也拼接不成功，则返回NULL
+      else{
+        names(spliceFA) <- 1:length(spliceFA)
+        #重命名
+        MS2 <- findmyCL::fappend(list1 = MS2 , list2 = spliceFA)
+        #追加到MS2中
+        return(MS2)
+      }
+      #如果无法由PA拼接成心磷脂,则进行3个FA的拼接,去除空值，如果3个FA拼接成功，则返回FA拼接结果
     }
-    #如果这个二级的PA都无法拼接成心磷脂，则将这个二级去除（即返回NULL）
+
     names(splicePA_list) <- 1:length(splicePA_list)
     #重命名拼接PA的结果
     spliceFA_list <- purrr::map(.x = splicePA_list , .f = findmyCL::splice2FA_MLCL , FA = MS2$FA) %>%

@@ -54,9 +54,22 @@ splicePAFA_DLCL <- function(MS2 , MS1){
       findmyCL::deleteNULL()
     #进行PA的拼接，去除NULL,splicePA_list包括多个一级对应的拼接结果，是一个列表，每个属性包括每个一级对应的结果
     if (length(splicePA_list) == 0) {
-      return(NULL)
+      spliceFA_list <- purrr::pmap(.l = list(as.list(MS1$`Chain Length:Δ`) , as.list(MS1$Oxform)) , .f = findmyCL::splice2FA_DLCL , FA = MS2$FA) %>%
+        findmyCL::deleteNULL()
+      if (length(spliceFA_list) == 0) {
+        return(NULL)
+      }
+      #如果DLCL无法由PA拼接而成，则尝试是否能由2个FA拼接而成，如果无法由2个FA拼接而成，则返回NULL
+      else{
+        MS2 <- findmyCL::fappend(list1 = MS2 , list2 = spliceFA_list)
+        #追加到MS2中
+        names(MS2) <- c("MS2","PA","FA","spliceFA")
+        #重命名追加结果
+        return(MS2)
+      }
+      #如果DLCL无法由PA拼接而成，则尝试是否能由2个FA拼接而成，如果可以由2个FA拼接而成，则返回FA的拼接结果
     }
-    #如果这个二级的PA都无法拼接成DLCL，则将这个二级去除（即返回NULL）
+
     names(splicePA_list) <- 1:length(splicePA_list)
     #重命名拼接PA的结果
     spliceFA_list <- purrr::map(.x = splicePA_list , .f = findmyCL::splicePA2FA_DLCL , FA = MS2$FA) %>%
