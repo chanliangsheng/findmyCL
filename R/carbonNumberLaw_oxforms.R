@@ -144,13 +144,13 @@ score_main_oxy <- function(x , dataframe) {
   #对链长不同的心磷脂进行计分
 
   for (i in 1:length(oxforms_deal[, 1])) {
-    if (oxforms_deal[i,]$chain > x$chain) {
-      if (oxforms_deal[i,]$rt > x$rt) {
+    if (oxforms_deal[i,]$oxforms > x$oxforms) {
+      if (oxforms_deal[i,]$rt < x$rt) {
         score <- score + 1
         count <- count + 1
         #如果符合碳数规律，分数 + 1
       }
-      if (oxforms_deal[i,]$rt < x$rt) {
+      if (oxforms_deal[i,]$rt > x$rt) {
         score <- score - 1
         count <- count + 1
         #如果不符合碳数规律，分数 - 1
@@ -158,13 +158,13 @@ score_main_oxy <- function(x , dataframe) {
     }
     #如果同不饱和度中的链长比 被比较的样本大
 
-    if (oxforms_deal[i,]$chain < x$chain) {
-      if (oxforms_deal[i,]$rt < x$rt) {
+    if (oxforms_deal[i,]$oxforms < x$oxforms) {
+      if (oxforms_deal[i,]$rt > x$rt) {
         score <- score + 1
         count <- count + 1
         #如果符合碳数规律，分数 + 1
       }
-      if (oxforms_deal[i,]$rt > x$rt) {
+      if (oxforms_deal[i,]$rt < x$rt) {
         score <- score - 1
         count <- count + 1
         #如果不符合碳数规律，分数 - 1
