@@ -1,0 +1,1242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1623</width>
+    <height>1151</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>71</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="LabelMs1Message">
+       <property name="styleSheet">
+        <string notr="true">border: 1px solid black;</string>
+       </property>
+       <property name="text">
+        <string>Ms1:</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="LabelMs2Message">
+       <property name="styleSheet">
+        <string notr="true">border: 1px solid black;</string>
+       </property>
+       <property name="text">
+        <string>Ms2:</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="LabelMatchMs1">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>10</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Match MS1</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PushButtonMatchMs1">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>140</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>start</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>40</y>
+      <width>280</width>
+      <height>90</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="2" column="0">
+        <widget class="QLabel" name="LabelMatchMs1PPmWithHalfScore">
+         <property name="text">
+          <string>ppm_with_half_score</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="LabelMatchMs1PPm">
+         <property name="text">
+          <string>ppm:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="LabelMatchMs1ToleranceRt">
+         <property name="text">
+          <string>tolerance_rt_scope(sec)</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="0" column="0">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxMatchMs1PPm">
+           <property name="maximum">
+            <double>10000.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>5.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxMatchMs1ToleranceRt">
+           <property name="maximum">
+            <double>10000.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>4.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxMatchMs1PPmWithHalfScore">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="LabelMatchMs1WithMs2">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>210</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ms1 Match With Ms2</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>240</y>
+      <width>280</width>
+      <height>90</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_5">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_6">
+       <item row="1" column="0">
+        <widget class="QLabel" name="LabelMatchMs1WithMs2ToleranceRt">
+         <property name="text">
+          <string>tolerance_rt_scope(sec)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="LabelMatchMs1WithMs2Dalton">
+         <property name="text">
+          <string>dalton:</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_8">
+         <item row="0" column="0">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxMatchMs1WithMs2Dalton">
+           <property name="maximum">
+            <double>10000.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxMatchMs1WithMs2ToleranceRt">
+           <property name="maximum">
+            <double>10000.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>15.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="PushButtonMatchMs1WithMs2">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>270</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>start</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="TableWidgetMatchMs1Result">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>0</y>
+      <width>611</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="columnCount">
+     <number>6</number>
+    </property>
+    <attribute name="horizontalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>20</number>
+    </attribute>
+    <attribute name="verticalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>30</number>
+    </attribute>
+    <column>
+     <property name="text">
+      <string>M-H mz</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-H rt</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-H structure</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H mz</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H rt</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H structure</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QLabel" name="LabelCheckHeadGroup">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>400</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Check HeadGroup</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PushButtonCheakHeadGroup">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>400</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>start</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>430</y>
+      <width>250</width>
+      <height>90</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_9">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_10">
+       <item row="1" column="0">
+        <widget class="QLabel" name="LabelCheckHeadGroupMzScoreWeight">
+         <property name="text">
+          <string>mz_score_weight:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="LabelCheckHeadGroupPPm">
+         <property name="text">
+          <string>ppm:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="LabelCheakHeadGroupPPmWithHalfScore">
+         <property name="text">
+          <string>ppm_with_half_score</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <layout class="QGridLayout" name="gridLayout_11">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_12">
+         <item row="0" column="0">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxCheakHeadGrouppPPm">
+           <property name="maximum">
+            <double>10000.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>30.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxCheadHeadGroupMzScoreWeight">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxCheckHeadGroupPPmWithHalfScore">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="LabelFindPaAndFa">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>590</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Find PA and FA</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="LabelSplice">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>730</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Splice</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PushButtonSplice">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>730</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>start</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>760</y>
+      <width>250</width>
+      <height>90</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_17">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_18">
+       <item row="0" column="0">
+        <widget class="QLabel" name="LabelSpliceMode">
+         <property name="text">
+          <string>mode:</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <layout class="QGridLayout" name="gridLayout_19">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_20">
+         <item row="0" column="0">
+          <widget class="QComboBox" name="ComboBoxSpliceMode">
+           <item>
+            <property name="text">
+             <string>flexible</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>strict</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="PushButtonFindPaAndFa">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>580</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>start</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>620</y>
+      <width>250</width>
+      <height>90</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_13">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_14">
+       <item row="1" column="0">
+        <widget class="QLabel" name="LabelFindPaAndFaMzScoreWeight">
+         <property name="text">
+          <string>mz_score_weight:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="LabelFindPaAndFaPPm">
+         <property name="text">
+          <string>ppm:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="LabelFindPaAndFaPPmWithHalfScore">
+         <property name="text">
+          <string>ppm_with_half_score</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <layout class="QGridLayout" name="gridLayout_15">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_16">
+         <item row="0" column="0">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxFindPaAndFaPPm">
+           <property name="maximum">
+            <double>10000.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>30.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxFindPaAndFaMzScoreWeight">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxFindPaAndFaPPmWithHalfScore">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QTableWidget" name="TableWidgetSpliceResult">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>790</y>
+      <width>621</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="columnCount">
+     <number>6</number>
+    </property>
+    <attribute name="horizontalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>20</number>
+    </attribute>
+    <attribute name="verticalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>30</number>
+    </attribute>
+    <column>
+     <property name="text">
+      <string>M-H mz</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-H rt</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-H structure</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H mz</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H rt</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H structure</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QPushButton" name="PushButtonAddFiles">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>80</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>自动点击</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>920</x>
+      <y>800</y>
+      <width>394</width>
+      <height>47</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_23">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_22">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_21">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>min-rt:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxSpliceMinRt">
+           <property name="maximum">
+            <double>1000000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxSpliceMaxRt">
+           <property name="maximum">
+            <double>10000000.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>10000000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>max-rt:</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="PushButtonSpliceFilterRt">
+       <property name="text">
+        <string>filter</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_6">
+    <property name="geometry">
+     <rect>
+      <x>1030</x>
+      <y>10</y>
+      <width>394</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_24">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_25">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_26">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>min-rt:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxMatchMs1MinRt">
+           <property name="maximum">
+            <double>1000000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>max-rt:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxMatchMs1MaxRt">
+           <property name="maximum">
+            <double>10000000.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>10000000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="PushButtonMatchMs1FilterRt">
+       <property name="text">
+        <string>filter</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QTableWidget" name="TableWidgetMatchMs1WithMs2Result">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>190</y>
+      <width>611</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="columnCount">
+     <number>6</number>
+    </property>
+    <attribute name="horizontalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>20</number>
+    </attribute>
+    <attribute name="verticalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>30</number>
+    </attribute>
+    <column>
+     <property name="text">
+      <string>M-H mz</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-H rt</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-H structure</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H mz</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H rt</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H structure</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTableWidget" name="TableWidgetCheakHeadGroupResult">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>390</y>
+      <width>611</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="columnCount">
+     <number>6</number>
+    </property>
+    <attribute name="horizontalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>20</number>
+    </attribute>
+    <attribute name="verticalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>30</number>
+    </attribute>
+    <column>
+     <property name="text">
+      <string>M-H mz</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-H rt</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-H structure</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H mz</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H rt</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H structure</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTableWidget" name="TableWidgetFindPaAndFaResult">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>600</y>
+      <width>611</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="columnCount">
+     <number>6</number>
+    </property>
+    <attribute name="horizontalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>20</number>
+    </attribute>
+    <attribute name="verticalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>30</number>
+    </attribute>
+    <column>
+     <property name="text">
+      <string>M-H mz</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-H rt</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-H structure</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H mz</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H rt</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>M-2H structure</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_7">
+    <property name="geometry">
+     <rect>
+      <x>1030</x>
+      <y>240</y>
+      <width>394</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_27">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_28">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_29">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>min-rt:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxMatchMs1WithMs2MinRt">
+           <property name="maximum">
+            <double>1000000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>max-rt:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxMatchMs1WithMs2MaxRt">
+           <property name="maximum">
+            <double>10000000.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>10000000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="PushButtonMatchMs1WithMs2FilterRt">
+       <property name="text">
+        <string>filter</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_8">
+    <property name="geometry">
+     <rect>
+      <x>1030</x>
+      <y>460</y>
+      <width>394</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_30">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_31">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_32">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>min-rt:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxCheakHeadGroupMinRt">
+           <property name="maximum">
+            <double>1000000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>max-rt:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxCheakHeadGroupMaxRt">
+           <property name="maximum">
+            <double>10000000.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>10000000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="PushButtonCheakHeadGroupFilterRt">
+       <property name="text">
+        <string>filter</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_9">
+    <property name="geometry">
+     <rect>
+      <x>1030</x>
+      <y>660</y>
+      <width>394</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_33">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_34">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_35">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>min-rt:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxFindPaAndFaMinRt">
+           <property name="maximum">
+            <double>1000000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string>max-rt:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxFindPaAndFaMaxRt">
+           <property name="maximum">
+            <double>10000000.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>10000000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="PushButtonFindPaAndFaFilterRt">
+       <property name="text">
+        <string>filter</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>850</y>
+      <width>231</width>
+      <height>89</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_39">
+     <item row="1" column="0">
+      <layout class="QGridLayout" name="gridLayout_37">
+       <item row="0" column="0">
+        <widget class="QLabel" name="LabelSpliceFaConsistencyScoreWeight">
+         <property name="text">
+          <string>fa_consistency_score_weight</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QDoubleSpinBox" name="DoubleSpinBoxSpliceFaConsistencyScoreWeight">
+         <property name="maximum">
+          <double>1.000000000000000</double>
+         </property>
+         <property name="value">
+          <double>0.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="0">
+      <layout class="QGridLayout" name="gridLayout_38">
+       <item row="0" column="0">
+        <widget class="QLabel" name="LabelFindPaAndFaMzScoreWeight_5">
+         <property name="text">
+          <string>pa_exist_score_weight:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QDoubleSpinBox" name="DoubleSpinBoxSplicePaExistScoreWeight">
+         <property name="maximum">
+          <double>1.000000000000000</double>
+         </property>
+         <property name="value">
+          <double>0.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_36">
+       <item row="0" column="1">
+        <widget class="QDoubleSpinBox" name="DoubleSpinBoxSpliceFragmentScoreWeight">
+         <property name="maximum">
+          <double>1.000000000000000</double>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="LabelSpliceFragmentScoreWeight">
+         <property name="text">
+          <string>fragment_score_weight</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="PushButtonOutputResultDir">
+    <property name="geometry">
+     <rect>
+      <x>1240</x>
+      <y>850</y>
+      <width>161</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>output result</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1623</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>打开</string>
+    </property>
+    <addaction name="ActionOpenMs1"/>
+    <addaction name="ActionOpenMs2"/>
+   </widget>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="ActionOpenMs1">
+   <property name="text">
+    <string>打开.csv文件(一级)</string>
+   </property>
+  </action>
+  <action name="ActionOpenMs2">
+   <property name="text">
+    <string>打开.mzml文件(二级)</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
