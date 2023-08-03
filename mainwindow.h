@@ -2,6 +2,18 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDebug>
+#include <base64.h>
+#include <database.h>
+#include <mzml.h>
+#include <Ms1LibraryMatcher.h>
+#include <database.h>
+#include <MsLevelMatcher.h>
+#include <HeadgroupFinder.h>
+#include <FragmentFinder.h>
+#include <FragmentCombiner.h>
+#include <QFileDialog>
+#include <QThread>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

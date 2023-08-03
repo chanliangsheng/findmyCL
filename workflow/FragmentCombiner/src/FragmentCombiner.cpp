@@ -30,11 +30,6 @@ void FragmentCombiner::splice()
 {
     //cl
     for(auto itr = this->m_cl_vector.begin() ; itr != this->m_cl_vector.end();){
-
-        if(itr->first.GetMs1DatabaseRecordComponent() == array<unsigned int , 3>({58,3,0})){
-            qDebug() << "stop";
-        }
-
         itr->first.splice();
         itr->second.splice();
         //如果两个都没有拼接成功；或者一个原本是没有的，另一个没有拼接成功，则将其删除
@@ -96,11 +91,15 @@ void FragmentCombiner::splice()
            return lhs.m_score > rhs.m_score;
        });
    }
+
+
    for(auto itr = this->m_mlcl_merge_hash_table.begin() ; itr != this->m_mlcl_merge_hash_table.end() ; itr++){
        itr->second->sort([](const MlclSpecificStructure& lhs, const MlclSpecificStructure& rhs){
            return lhs.m_score > rhs.m_score;
        });
    }
+
+
    for(auto itr = this->m_dlcl_merge_hash_table.begin() ; itr != this->m_dlcl_merge_hash_table.end() ; itr++){
        itr->second->sort([](const DlclSpecificStructure& lhs, const DlclSpecificStructure& rhs){
            return lhs.m_score > rhs.m_score;
@@ -775,15 +774,32 @@ void FragmentCombiner::OutPutWithCsv(QString folder_path)
     file.open(QIODevice::WriteOnly | QIODevice::Text);//打开文件
 
     QTextStream stream(&file);//文本流
-    stream << "Compound" << "," << "M.H.m.z" << "," << "M.2H.m.z" << "," << "rt(sec)" << "," << "CL" << "," << "top-1" << "," << "intensity" << endl;
+    stream << "Compound" << "," << "M.H.m.z" << "," << "M.2H.m.z" << "," << "rt(sec)" << "," << "CL" << "," << "intensity" << "," << "top-1" << "," << "top-2" << "," << "top-3" << endl;
     //输出CL
     for(auto itr = this->m_cl_merge_hash_table.begin() ; itr != this->m_cl_merge_hash_table.end();itr++){
         QString component_message = GetPairComponentWithQString<Cl>(*(itr->first));//获得pair的化合物信息
         pair<float,float> sample_mz = GetPairSampleMz<Cl>(*(itr->first));//获得pair的mz，有M-H和M-2H的mz
         float sample_rt = GetPairRt<Cl>(*(itr->first));//获得pair的rt，结果为M-H和M-2H的平均值
+
         QString best_splice = itr->second->begin()->ShowSimpleInfo();//获得最优拼接
+        QString top_2_splice = "";
+        QString top_3_splice = "";
+
+        if(itr->second->size() == 2){
+            auto itr_move = itr->second->begin();
+            itr_move++;
+            top_2_splice = itr_move->ShowSimpleInfo();
+        }
+        else if(itr->second->size() > 2){
+            auto itr_move = itr->second->begin();
+            itr_move++;
+            top_2_splice = itr_move->ShowSimpleInfo();
+            itr_move++;
+            top_3_splice = itr_move->ShowSimpleInfo();
+        }
+
         float sample_intensity = GetPairIntensity(*(itr->first));//获取pair的intensity，结果为M-H和M-2H的最大值
-        stream << component_message << "," << sample_mz.first << "," << sample_mz.second << "," << sample_rt << "," << "CL" << "," << best_splice << "," << sample_intensity << endl;
+        stream << component_message << "," << sample_mz.first << "," << sample_mz.second << "," << sample_rt << "," << "CL" << "," << sample_intensity << "," << best_splice << "," << top_2_splice << "," << top_3_splice << endl;
     }
 
     //输出MLCL
@@ -791,9 +807,24 @@ void FragmentCombiner::OutPutWithCsv(QString folder_path)
         QString component_message = GetPairComponentWithQString<Mlcl>(*(itr->first));//获得pair的化合物信息
         pair<float,float> sample_mz = GetPairSampleMz<Mlcl>(*(itr->first));
         float sample_rt = GetPairRt<Mlcl>(*(itr->first));
-        QString best_splice = itr->second->begin()->ShowSimpleInfo();
+        QString best_splice = itr->second->begin()->ShowSimpleInfo();//获得最优拼接
+        QString top_2_splice = "";
+        QString top_3_splice = "";
+
+        if(itr->second->size() == 2){
+            auto itr_move = itr->second->begin();
+            itr_move++;
+            top_2_splice = itr_move->ShowSimpleInfo();
+        }
+        else if(itr->second->size() > 2){
+            auto itr_move = itr->second->begin();
+            itr_move++;
+            top_2_splice = itr_move->ShowSimpleInfo();
+            itr_move++;
+            top_3_splice = itr_move->ShowSimpleInfo();
+        }
         float sample_intensity = GetPairIntensity(*(itr->first));//获取pair的intensity，结果为M-H和M-2H的最大值
-        stream << component_message << "," << sample_mz.first << "," << sample_mz.second << "," << sample_rt << "," << "MLCL" << "," << best_splice << "," << sample_intensity << endl;
+        stream << component_message << "," << sample_mz.first << "," << sample_mz.second << "," << sample_rt << "," << "MLCL" << "," << sample_intensity << "," << best_splice << "," << top_2_splice << "," << top_3_splice << endl;
     }
 
     //输出DLCL
@@ -801,9 +832,24 @@ void FragmentCombiner::OutPutWithCsv(QString folder_path)
         QString component_message = GetPairComponentWithQString<Dlcl>(*(itr->first));//获得pair的化合物信息
         pair<float,float> sample_mz = GetPairSampleMz<Dlcl>(*(itr->first));
         float sample_rt = GetPairRt<Dlcl>(*(itr->first));
-        QString best_splice = itr->second->begin()->ShowSimpleInfo();
+        QString best_splice = itr->second->begin()->ShowSimpleInfo();//获得最优拼接
+        QString top_2_splice = "";
+        QString top_3_splice = "";
+
+        if(itr->second->size() == 2){
+            auto itr_move = itr->second->begin();
+            itr_move++;
+            top_2_splice = itr_move->ShowSimpleInfo();
+        }
+        else if(itr->second->size() > 2){
+            auto itr_move = itr->second->begin();
+            itr_move++;
+            top_2_splice = itr_move->ShowSimpleInfo();
+            itr_move++;
+            top_3_splice = itr_move->ShowSimpleInfo();
+        }
         float sample_intensity = GetPairIntensity(*(itr->first));//获取pair的intensity，结果为M-H和M-2H的最大值
-        stream << component_message << "," << sample_mz.first << "," << sample_mz.second << "," << sample_rt << "," << "DLCL" << "," << best_splice << "," << sample_intensity << endl;
+        stream << component_message << "," << sample_mz.first << "," << sample_mz.second << "," << sample_rt << "," << "DLCL" << "," << sample_intensity << "," << best_splice << "," << top_2_splice << "," << top_3_splice << endl;
     }
 
     file.close();//关闭文件
@@ -935,6 +981,26 @@ void FragmentCombiner::Filter()
     //    }
 
     qDebug() << "拼接结果过滤成功";
+}
+
+void FragmentCombiner::ClearSpliceResult()
+{
+    for(auto itr = this->m_cl_vector.begin();itr != this->m_cl_vector.end() ; itr++){
+        itr->first.ClearSpliceResult();
+        itr->second.ClearSpliceResult();
+    }
+    for(auto itr = this->m_mlcl_vector.begin();itr != this->m_mlcl_vector.end() ; itr++){
+        itr->first.ClearSpliceResult();
+        itr->second.ClearSpliceResult();
+    }
+    for(auto itr = this->m_dlcl_vector.begin();itr != this->m_dlcl_vector.end() ; itr++){
+        itr->first.ClearSpliceResult();
+        itr->second.ClearSpliceResult();
+    }
+
+    this->m_cl_merge_hash_table.clear();
+    this->m_mlcl_merge_hash_table.clear();
+    this->m_dlcl_merge_hash_table.clear();
 }
 
 

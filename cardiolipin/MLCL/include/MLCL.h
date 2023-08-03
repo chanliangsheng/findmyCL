@@ -18,6 +18,8 @@ public:
     void OnePaThreeFaSpliceMlcl(Ms2* ms2_ptr);//1个PA和3个FA拼接这个Mlcl
 public:
     void EmptyObject() override;
+    void ClearSpliceResult();
+    void DeleteRedundantSpliceResult();
 };
 
 #endif // MLCL_H

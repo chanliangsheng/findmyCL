@@ -16,6 +16,8 @@ public:
     Cardiolipin();//默认构造函数
     Cardiolipin(Ms1* Ms1_ptr , DatabaseRecord* DatabaseRecord_ptr);
 public:
+    static float m_delete_redundant_splice_result_radio;
+public:
     void SetMs1Ptr(Ms1* ms1_ptr);
     void SetMs1DatabaseRecordPtr(DatabaseRecord* ms1_databaseRecord_ptr);
     void SetMs1MatchingScosre(float ms1_matching_score);

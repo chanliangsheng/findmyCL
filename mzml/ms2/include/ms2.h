@@ -28,6 +28,8 @@ public:
     float GetRt();
     std::vector<float> GetFragmentIonMz();
     std::vector<float> GetFragmentIonIntensity();
+    float GetTotalIntensity();
+    void CalculateTotalIntensity();
     std::vector<Headgroup> GetHeadgroup();
 
     void ClearHeadgroup();
@@ -52,6 +54,7 @@ private:
     //前体离子的信息
     float m_precursor_ion_mz = 0;
     float m_precursor_ion_intensity = 0;
+    float m_total_intensity = 0;
     float m_rt = 0;
     //碎片离子的信息
     std::vector<float> m_fragment_ion_mz;

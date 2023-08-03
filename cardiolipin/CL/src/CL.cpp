@@ -39,6 +39,10 @@ void Cl::splice()
         return;
     }
 
+//        if(this->GetChainLength() == 70 && this->GetUnsaturation() == 6 && this->GetOxygen() == 0){
+//            qDebug() << "stop";
+//        }
+
     //对不同的情况进行拼接操作
     std::vector<Ms2*> ms2_ptr_vector = this->GetMs2VectorPtr();
     for(auto ms2_itr = ms2_ptr_vector.begin() ; ms2_itr != ms2_ptr_vector.end();ms2_itr++){
@@ -56,6 +60,9 @@ void Cl::splice()
         }
     }
 
+    //去除强度低的拼接结果
+    this->DeleteRedundantSpliceResult();
+
     //如果没有拼接成功，则清空对象
     if(this->m_cl_specific_structure_vector.size() == 0){
         this->EmptyObject();
@@ -64,15 +71,17 @@ void Cl::splice()
 
     //合并不同二级之间的拼接结果
     this->MergeSplice();
+
 }
 
 
 void Cl::MergeSplice()
 {
-//    //如果只有一个二级，则不需要合并，因为一个二级中的所有拼接结果都是不重复的
-//    if(this->m_Ms2_vector_ptr.size() == 1){
-//        return;
-//    }
+    //    //如果只有一个二级，则不需要合并，因为一个二级中的所有拼接结果都是不重复的
+    //    if(this->m_Ms2_vector_ptr.size() == 1){
+    //        return;
+    //    }
+
     list<ClSpecificStructure> non_repeating_only_pa_list;//存储只有PA和FA的对象，用list来存储
     list<ClSpecificStructure> non_repeating_only_fa_list;//存储只有PA和FA的对象，用list来存储
     list<ClSpecificStructure> non_repeating_have_both_pa_fa_list;//存储既有PA和又有FA的对象，用list来存储
@@ -189,11 +198,11 @@ void Cl::MergeSplice()
     }
     this->m_cl_specific_structure_vector.splice(this->m_cl_specific_structure_vector.end() , compare_to_have_both_pa_fa_list);
 
-//    if(this->GetChainLength() == 70 && this->GetUnsaturation() == 4){
-//        for(auto itr = this->m_cl_specific_structure_vector.begin() ; itr != this->m_cl_specific_structure_vector.end() ; itr++){
-//            itr->Print();
-//        }
-//    }
+    //    if(this->GetChainLength() == 70 && this->GetUnsaturation() == 4){
+    //        for(auto itr = this->m_cl_specific_structure_vector.begin() ; itr != this->m_cl_specific_structure_vector.end() ; itr++){
+    //            itr->Print();
+    //        }
+    //    }
     //问题应该不出在这里
 }
 
@@ -213,8 +222,8 @@ void Cl::FourFaSpliceCl(Ms2* ms2_ptr)
             int right = fa_vector_size - 1;
             while(left <= right){
                 if(((fa_vector_ptr->at(i).GetChainLength() + fa_vector_ptr->at(j).GetChainLength() + fa_vector_ptr->at(left).GetChainLength() + fa_vector_ptr->at(right).GetChainLength()) == (this->GetChainLength()) &&
-                   ((fa_vector_ptr->at(i).GetUnsaturation() + fa_vector_ptr->at(j).GetUnsaturation() + fa_vector_ptr->at(left).GetUnsaturation() + fa_vector_ptr->at(right).GetUnsaturation()) == (this->GetUnsaturation()) &&
-                   ((fa_vector_ptr->at(i).GetOxygen() + fa_vector_ptr->at(j).GetOxygen() + fa_vector_ptr->at(left).GetOxygen() + fa_vector_ptr->at(right).GetOxygen()) == (this->GetOxygen()))))){
+                    ((fa_vector_ptr->at(i).GetUnsaturation() + fa_vector_ptr->at(j).GetUnsaturation() + fa_vector_ptr->at(left).GetUnsaturation() + fa_vector_ptr->at(right).GetUnsaturation()) == (this->GetUnsaturation()) &&
+                     ((fa_vector_ptr->at(i).GetOxygen() + fa_vector_ptr->at(j).GetOxygen() + fa_vector_ptr->at(left).GetOxygen() + fa_vector_ptr->at(right).GetOxygen()) == (this->GetOxygen()))))){
                     this->m_cl_specific_structure_vector.emplace_back(ClSpecificStructure(&fa_vector_ptr->at(i) , &fa_vector_ptr->at(j) , &fa_vector_ptr->at(left) , &fa_vector_ptr->at(right) , ms2_ptr));//加入到结果中
                     int left_t = left;
                     while((left_t < fa_vector_size - 1) && (fa_vector_ptr->at(left_t).GetChainLength() == fa_vector_ptr->at(left_t + 1).GetChainLength()) && (fa_vector_ptr->at(left_t).GetUnsaturation() == fa_vector_ptr->at(left_t + 1).GetUnsaturation()) && (fa_vector_ptr->at(left_t).GetOxygen() == fa_vector_ptr->at(left_t + 1).GetOxygen())){
@@ -237,8 +246,8 @@ void Cl::FourFaSpliceCl(Ms2* ms2_ptr)
                     int right_t = right;
                     while(left_t + 1 < right_t){
                         if(((fa_vector_ptr->at(i).GetChainLength() + fa_vector_ptr->at(j).GetChainLength() + fa_vector_ptr->at(left_t + 1).GetChainLength() + fa_vector_ptr->at(right).GetChainLength()) == (this->GetChainLength())) &&
-                           ((fa_vector_ptr->at(i).GetUnsaturation() + fa_vector_ptr->at(j).GetUnsaturation() + fa_vector_ptr->at(left_t + 1).GetUnsaturation() + fa_vector_ptr->at(right).GetUnsaturation()) == (this->GetUnsaturation())) &&
-                           ((fa_vector_ptr->at(i).GetOxygen() + fa_vector_ptr->at(j).GetOxygen() + fa_vector_ptr->at(left_t + 1).GetOxygen() + fa_vector_ptr->at(right).GetOxygen()) == (this->GetOxygen()))){
+                                ((fa_vector_ptr->at(i).GetUnsaturation() + fa_vector_ptr->at(j).GetUnsaturation() + fa_vector_ptr->at(left_t + 1).GetUnsaturation() + fa_vector_ptr->at(right).GetUnsaturation()) == (this->GetUnsaturation())) &&
+                                ((fa_vector_ptr->at(i).GetOxygen() + fa_vector_ptr->at(j).GetOxygen() + fa_vector_ptr->at(left_t + 1).GetOxygen() + fa_vector_ptr->at(right).GetOxygen()) == (this->GetOxygen()))){
                             this->m_cl_specific_structure_vector.emplace_back(ClSpecificStructure(&fa_vector_ptr->at(i) , &fa_vector_ptr->at(j) , &fa_vector_ptr->at(left_t + 1) , &fa_vector_ptr->at(right) , ms2_ptr));//加入到结果中
                         }
                         left_t++;
@@ -268,7 +277,7 @@ void Cl::TwoPaSpliceCl(Ms2* ms2_ptr)
             for(auto match_itr = search_pair_itr.first ; match_itr != search_pair_itr.second ; match_itr++){
                 //如果链长相加起来等于目标链长的情况下，如果不饱和度和氧个数加起来都等于目标的这些属性，加入到结果中
                 if(((pa_vector_itr->GetUnsaturation() + match_itr->second->GetUnsaturation()) == this->GetUnsaturation()) &&
-                   ((pa_vector_itr->GetOxygen() + match_itr->second->GetOxygen()) == this->GetOxygen())){
+                        ((pa_vector_itr->GetOxygen() + match_itr->second->GetOxygen()) == this->GetOxygen())){
                     this->m_cl_specific_structure_vector.emplace_back(ClSpecificStructure(&*pa_vector_itr , match_itr->second , ms2_ptr));//加入到结果中
                 }
             }
@@ -299,7 +308,7 @@ void Cl::TwoPaFourFaSpliceCl(Ms2* ms2_ptr)
             for(auto match_itr = search_pair_itr.first ; match_itr != search_pair_itr.second ; match_itr++){
                 //如果链长相加起来等于目标链长的情况下，如果不饱和度和氧个数加起来都等于目标的这些属性，那么寻找是否有FA可以拼接成这些Pa
                 if(((pa_vector_ptr_itr->GetUnsaturation() + match_itr->second->GetUnsaturation()) == this->GetUnsaturation()) &&
-                   ((pa_vector_ptr_itr->GetOxygen() + match_itr->second->GetOxygen()) == this->GetOxygen())){
+                        ((pa_vector_ptr_itr->GetOxygen() + match_itr->second->GetOxygen()) == this->GetOxygen())){
                     which_four_fa_splice_two_pa = this->FourFaSpliceTwoPa(&*pa_vector_ptr_itr , match_itr->second , fa_vector_ptr , which_four_fa_splice_two_pa , ms2_ptr);//四个FA拼接这两个PA，which_four_fa_splice_two_pa存储能拼接成PA的四个FA的信息
                 }
             }
@@ -314,8 +323,8 @@ void Cl::TwoPaFourFaSpliceCl(Ms2* ms2_ptr)
             int right = fa_vector_size - 1;
             while(left <= right){
                 if(((fa_vector_ptr->at(i).GetChainLength() + fa_vector_ptr->at(j).GetChainLength() + fa_vector_ptr->at(left).GetChainLength() + fa_vector_ptr->at(right).GetChainLength()) == (this->GetChainLength())) &&
-                   ((fa_vector_ptr->at(i).GetUnsaturation() + fa_vector_ptr->at(j).GetUnsaturation() + fa_vector_ptr->at(left).GetUnsaturation() + fa_vector_ptr->at(right).GetUnsaturation()) == (this->GetUnsaturation())) &&
-                   ((fa_vector_ptr->at(i).GetOxygen() + fa_vector_ptr->at(j).GetOxygen() + fa_vector_ptr->at(left).GetOxygen() + fa_vector_ptr->at(right).GetOxygen()) == (this->GetOxygen()))){
+                        ((fa_vector_ptr->at(i).GetUnsaturation() + fa_vector_ptr->at(j).GetUnsaturation() + fa_vector_ptr->at(left).GetUnsaturation() + fa_vector_ptr->at(right).GetUnsaturation()) == (this->GetUnsaturation())) &&
+                        ((fa_vector_ptr->at(i).GetOxygen() + fa_vector_ptr->at(j).GetOxygen() + fa_vector_ptr->at(left).GetOxygen() + fa_vector_ptr->at(right).GetOxygen()) == (this->GetOxygen()))){
                     //如果找不到，说明这四个FA无法拼接成那2个PA，把这个四个FA的组合情况加入到结果中
                     if(which_four_fa_splice_two_pa.find({&fa_vector_ptr->at(i) , &fa_vector_ptr->at(j) , &fa_vector_ptr->at(left) , &fa_vector_ptr->at(right)}) == which_four_fa_splice_two_pa.end()){
                         this->m_cl_specific_structure_vector.emplace_back(ClSpecificStructure(&fa_vector_ptr->at(i) , &fa_vector_ptr->at(j) , &fa_vector_ptr->at(left) , &fa_vector_ptr->at(right) , ms2_ptr));//加入到结果中
@@ -326,10 +335,10 @@ void Cl::TwoPaFourFaSpliceCl(Ms2* ms2_ptr)
                         if(which_four_fa_splice_two_pa.find({&fa_vector_ptr->at(i) , &fa_vector_ptr->at(j) , &fa_vector_ptr->at(left_t + 1) , &fa_vector_ptr->at(right)}) == which_four_fa_splice_two_pa.end()){
 
                             this->m_cl_specific_structure_vector.emplace_back(ClSpecificStructure(&fa_vector_ptr->at(i), &fa_vector_ptr->at(j) , &fa_vector_ptr->at(left + 1) , &fa_vector_ptr->at(right) , ms2_ptr));//加入到结果中
-//                            if(this->GetChainLength() == 68 && this->GetUnsaturation() == 4){
-//                                this->m_cl_specific_structure_vector.back().Print();
+                            //                            if(this->GetChainLength() == 68 && this->GetUnsaturation() == 4){
+                            //                                this->m_cl_specific_structure_vector.back().Print();
 
-//                            }
+                            //                            }
                         }
                         left_t++;
                     }
@@ -349,8 +358,8 @@ void Cl::TwoPaFourFaSpliceCl(Ms2* ms2_ptr)
                     int right_t = right;
                     while(left_t + 1 < right_t){
                         if(((fa_vector_ptr->at(i).GetChainLength() + fa_vector_ptr->at(j).GetChainLength() + fa_vector_ptr->at(left_t + 1).GetChainLength() + fa_vector_ptr->at(right).GetChainLength()) == (this->GetChainLength())) &&
-                           ((fa_vector_ptr->at(i).GetUnsaturation() + fa_vector_ptr->at(j).GetUnsaturation() + fa_vector_ptr->at(left_t + 1).GetUnsaturation() + fa_vector_ptr->at(right).GetUnsaturation()) == (this->GetUnsaturation())) &&
-                           ((fa_vector_ptr->at(i).GetOxygen() + fa_vector_ptr->at(j).GetOxygen() + fa_vector_ptr->at(left_t + 1).GetOxygen() + fa_vector_ptr->at(right).GetOxygen()) == (this->GetOxygen()))){
+                                ((fa_vector_ptr->at(i).GetUnsaturation() + fa_vector_ptr->at(j).GetUnsaturation() + fa_vector_ptr->at(left_t + 1).GetUnsaturation() + fa_vector_ptr->at(right).GetUnsaturation()) == (this->GetUnsaturation())) &&
+                                ((fa_vector_ptr->at(i).GetOxygen() + fa_vector_ptr->at(j).GetOxygen() + fa_vector_ptr->at(left_t + 1).GetOxygen() + fa_vector_ptr->at(right).GetOxygen()) == (this->GetOxygen()))){
                             //如果找不到，说明这四个FA无法拼接成那2个PA，把这个四个FA的组合情况加入到结果中
                             if(which_four_fa_splice_two_pa.find({&fa_vector_ptr->at(i) , &fa_vector_ptr->at(j) , &fa_vector_ptr->at(left + 1) , &fa_vector_ptr->at(right)}) == which_four_fa_splice_two_pa.end()){
                                 this->m_cl_specific_structure_vector.emplace_back(ClSpecificStructure(&fa_vector_ptr->at(i) , &fa_vector_ptr->at(j) , &fa_vector_ptr->at(left_t + 1) , &fa_vector_ptr->at(right) , ms2_ptr));//加入到结果中
@@ -383,7 +392,7 @@ std::set<std::set<Fa*>>& Cl::FourFaSpliceTwoPa(Pa* pa_1_ptr , Pa* pa_2_ptr , std
             for(auto match_itr = search_first_pa_pair_itr.first ; match_itr != search_first_pa_pair_itr.second ; match_itr++){
                 //如果链长相加起来等于目标链长的情况下，如果不饱和度和氧个数加起来都等于目标的这些属性，那么就找到了可以拼接成第一个Pa的Fa
                 if(((fa_vector_itr->GetUnsaturation() + match_itr->second->GetUnsaturation()) == pa_1_ptr->GetUnsaturation()) &&
-                   ((fa_vector_itr->GetOxygen() + match_itr->second->GetOxygen()) == pa_1_ptr->GetOxygen())){
+                        ((fa_vector_itr->GetOxygen() + match_itr->second->GetOxygen()) == pa_1_ptr->GetOxygen())){
                     tow_fa_splice_first_pa.emplace_back(pair<Fa*,Fa*>(&*fa_vector_itr , match_itr->second));//记录哪两个FA拼接成了第一个PA
                 }
             }
@@ -414,11 +423,11 @@ std::set<std::set<Fa*>>& Cl::FourFaSpliceTwoPa(Pa* pa_1_ptr , Pa* pa_2_ptr , std
             for(auto match_itr = search_second_pa_pair_itr.first ; match_itr != search_second_pa_pair_itr.second ; match_itr++){
                 //如果链长相加起来等于目标链长的情况下，如果不饱和度和氧个数加起来都等于目标的这些属性，那么就找到了可以拼接成第二个Pa的Fa
                 if(((fa_vector_itr->GetUnsaturation() + match_itr->second->GetUnsaturation()) == pa_2_ptr->GetUnsaturation()) &&
-                   ((fa_vector_itr->GetOxygen() + match_itr->second->GetOxygen()) == pa_2_ptr->GetOxygen())){
+                        ((fa_vector_itr->GetOxygen() + match_itr->second->GetOxygen()) == pa_2_ptr->GetOxygen())){
                     //遍历拼接第一个PA的结果，把结果追加到m_cl_specific_structure_vector和store中
                     for(auto tow_fa_splice_first_pa_itr = tow_fa_splice_first_pa.begin() ; tow_fa_splice_first_pa_itr != tow_fa_splice_first_pa.end() ; tow_fa_splice_first_pa_itr++){
 
-//                        set<set<Fa*>>::iterator search =  store.find({tow_fa_splice_first_pa_itr->first , tow_fa_splice_first_pa_itr->second , &*fa_vector_itr , match_itr->second});
+                        //                        set<set<Fa*>>::iterator search =  store.find({tow_fa_splice_first_pa_itr->first , tow_fa_splice_first_pa_itr->second , &*fa_vector_itr , match_itr->second});
                         store.insert({tow_fa_splice_first_pa_itr->first , tow_fa_splice_first_pa_itr->second , &*fa_vector_itr , match_itr->second});//追加这些可以拼接成PA的FA组合
                         this->m_cl_specific_structure_vector.emplace_back(ClSpecificStructure(pa_1_ptr , tow_fa_splice_first_pa_itr->first , tow_fa_splice_first_pa_itr->second , pa_2_ptr , &*fa_vector_itr , match_itr->second , ms2_ptr));
                     }
@@ -459,6 +468,25 @@ void Cl::EmptyObject()
             }
         }
         //把所有的CL详细结构清空
-        list<ClSpecificStructure>().swap(this->m_cl_specific_structure_vector);
+        this->ClearSpliceResult();
+    }
+}
+
+void Cl::ClearSpliceResult()
+{
+    //把所有的CL详细结构清空
+    list<ClSpecificStructure>().swap(this->m_cl_specific_structure_vector);
+}
+
+void Cl::DeleteRedundantSpliceResult()
+{
+    //删除拼接结果总强度小于二级总强度5%的拼接结果
+    for(auto itr = this->m_cl_specific_structure_vector.begin() ; itr != this->m_cl_specific_structure_vector.end();){
+        if((itr->GetTotalIntensity() / itr->GetMs2TotalIntensity()) <= this->m_delete_redundant_splice_result_radio){
+            itr = this->m_cl_specific_structure_vector.erase(itr);
+        }
+        else{
+            itr++;
+        }
     }
 }

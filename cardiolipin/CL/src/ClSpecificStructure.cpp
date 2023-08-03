@@ -3,6 +3,7 @@
 float ClSpecificStructure::m_fragment_score_weight = 1;
 float ClSpecificStructure::m_fa_consistency_score_weight = 1;
 float ClSpecificStructure::m_pa_exist_score_weight = 1;
+float ClSpecificStructure::m_fa_intensity_variance_score_weight = 1;
 
 using namespace std;
 
@@ -25,6 +26,7 @@ ClSpecificStructure::ClSpecificStructure()
     this->m_ms2 = nullptr;
 
     this->m_score = 0;
+    this->m_total_intensity = 0;
 }
 
 ClSpecificStructure::ClSpecificStructure(Fa* fa_1_ptr, Fa* fa_2_ptr, Fa* fa_3_ptr, Fa* fa_4_ptr , Ms2* ms2_ptr)
@@ -56,6 +58,9 @@ ClSpecificStructure::ClSpecificStructure(Fa* fa_1_ptr, Fa* fa_2_ptr, Fa* fa_3_pt
 
     //进行该拼接的打分
     this->score();
+
+    //计算总强度
+    this->CalculateTotalIntensity();
 }
 
 ClSpecificStructure::ClSpecificStructure(Pa *pa_1_ptr, Pa *pa_2_ptr, Ms2* ms2_ptr)
@@ -85,6 +90,8 @@ ClSpecificStructure::ClSpecificStructure(Pa *pa_1_ptr, Pa *pa_2_ptr, Ms2* ms2_pt
 
     //进行该拼接的打分
     this->score();
+    //计算总强度
+    this->CalculateTotalIntensity();
 }
 
 ClSpecificStructure::ClSpecificStructure(Pa *pa_1_ptr, Fa *fa_1_ptr, Fa *fa_2_ptr, Pa *pa_2_ptr, Fa *fa_3_ptr, Fa *fa_4_ptr, Ms2* ms2_ptr)
@@ -119,6 +126,8 @@ ClSpecificStructure::ClSpecificStructure(Pa *pa_1_ptr, Fa *fa_1_ptr, Fa *fa_2_pt
 
     //进行该拼接的打分
     this->score();
+    //计算总强度
+    this->CalculateTotalIntensity();
 }
 
 float ClSpecificStructure::GetScore()
@@ -129,8 +138,13 @@ float ClSpecificStructure::GetScore()
 void ClSpecificStructure::score()
 {
     float fragment_score = 0;
-    float pa_exist_score = 0;
     float fa_consistency_score = 0;
+
+
+//    vector<int> match_info = {66,2,0};
+//    if(this->GetTotalInfo() == match_info){
+//        qDebug() << "stop";
+//    }
 
     //如果这个组合的FA不存在，但是PA存在
     if(!this->m_fa_exist && this->m_pa_exist){
@@ -139,18 +153,173 @@ void ClSpecificStructure::score()
     }
     //如果FA存在，PA不存在
     else if(this->m_fa_exist && !this->m_pa_exist){
-        fragment_score = (this->m_left_pa_ptr->m_left_fa_ptr->GetScore() + this->m_left_pa_ptr->m_right_fa_ptr->GetScore() + this->m_right_pa_ptr->m_left_fa_ptr->GetScore() + this->m_right_pa_ptr->m_right_fa_ptr->GetScore()) / 4;//碎片分数是4个FA分数的平均值
+        //把4个FA的指针加入到哈希表中，这样可以把一样的FA合并，合并的结果是key：FA，value：FA出现的次数
+        unordered_map<Fa*,float> fa_hashmap;
+        fa_hashmap.insert({this->m_left_pa_ptr->m_left_fa_ptr , 1});
+
+        auto find_itr = fa_hashmap.find(this->m_left_pa_ptr->m_right_fa_ptr);
+        if(find_itr == fa_hashmap.end()){
+            fa_hashmap.insert({this->m_left_pa_ptr->m_right_fa_ptr,1});
+        }
+        else{
+            find_itr->second++;
+        }
+
+        find_itr = fa_hashmap.find(this->m_right_pa_ptr->m_left_fa_ptr);
+        if(find_itr == fa_hashmap.end()){
+            fa_hashmap.insert({this->m_right_pa_ptr->m_left_fa_ptr,1});
+        }
+        else{
+            find_itr->second++;
+        }
+
+        find_itr = fa_hashmap.find(this->m_right_pa_ptr->m_right_fa_ptr);
+        if(find_itr == fa_hashmap.end()){
+            fa_hashmap.insert({this->m_right_pa_ptr->m_right_fa_ptr,1});
+        }
+        else{
+            find_itr->second++;
+        }
+
+
+        //得到碎片分数
+        for(auto itr = fa_hashmap.begin() ; itr != fa_hashmap.end() ; itr++){
+            fragment_score += (*itr).first->GetScore();
+        }
+
+
+        //碎片分数是总分的平均值
+        fragment_score = fragment_score / 4;
+
+        //fa强度标准差分数
+        vector<float> fa_score_vector;
+        for(auto itr = fa_hashmap.begin() ; itr != fa_hashmap.end() ; itr++){
+            for(float i = 0 ; i < itr->second ; i++){
+                fa_score_vector.push_back(itr->first->GetScore() / itr->second);
+            }
+        }
+        //求平方和
+        float sum = std::accumulate(fa_score_vector.begin(), fa_score_vector.end(), 0.0, [fragment_score](float total, float value) {
+            return total + std::pow(value - fragment_score, 2);
+        });
+        float fa_intensity_variance_score = 1 - sqrt(sum/4);//分数为1-标准差，方差越大，分数越小
+
+        //fa一致性分数
         fa_consistency_score = float(this->m_fa_info.size()) / 4;
+
+
         //总分是碎片分数加上一致性分数
-        this->m_score = this->m_fragment_score_weight*fragment_score + this->m_fa_consistency_score_weight*fa_consistency_score;
+        this->m_score = this->m_fragment_score_weight*fragment_score + this->m_fa_consistency_score_weight*fa_consistency_score + this->m_fa_intensity_variance_score_weight*fa_intensity_variance_score;
     }
     //如果FA和PA都存在
     else if(this->m_fa_exist && this->m_pa_exist){
-        fragment_score = (this->m_left_pa_ptr->m_left_fa_ptr->GetScore() + this->m_left_pa_ptr->m_right_fa_ptr->GetScore() + this->m_right_pa_ptr->m_left_fa_ptr->GetScore() + this->m_right_pa_ptr->m_right_fa_ptr->GetScore()) / 4;//碎片分数是4个FA分数的平均值
+        //把4个FA的指针加入到哈希表中，这样可以把一样的FA合并，合并的结果是key：FA，value：FA出现的次数
+        unordered_map<Fa*,float> fa_hashmap;
+        fa_hashmap.insert({this->m_left_pa_ptr->m_left_fa_ptr , 1});
+
+        auto find_itr = fa_hashmap.find(this->m_left_pa_ptr->m_right_fa_ptr);
+        if(find_itr == fa_hashmap.end()){
+            fa_hashmap.insert({this->m_left_pa_ptr->m_right_fa_ptr,1});
+        }
+        else{
+            find_itr->second++;
+        }
+
+        find_itr = fa_hashmap.find(this->m_right_pa_ptr->m_left_fa_ptr);
+        if(find_itr == fa_hashmap.end()){
+            fa_hashmap.insert({this->m_right_pa_ptr->m_left_fa_ptr,1});
+        }
+        else{
+            find_itr->second++;
+        }
+
+        find_itr = fa_hashmap.find(this->m_right_pa_ptr->m_right_fa_ptr);
+        if(find_itr == fa_hashmap.end()){
+            fa_hashmap.insert({this->m_right_pa_ptr->m_right_fa_ptr,1});
+        }
+        else{
+            find_itr->second++;
+        }
+
+
+        //得到碎片分数
+        for(auto itr = fa_hashmap.begin() ; itr != fa_hashmap.end() ; itr++){
+            fragment_score += (*itr).first->GetScore();
+        }
+
+        //碎片分数是总分的平均值
+        fragment_score = fragment_score / 4;
+
+        //fa强度标准差分数
+        vector<float> fa_score_vector;
+        for(auto itr = fa_hashmap.begin() ; itr != fa_hashmap.end() ; itr++){
+            for(float i = 0 ; i < itr->second ; i++){
+                fa_score_vector.push_back(itr->first->GetScore() / itr->second);
+            }
+        }
+        //求平方和
+        float sum = std::accumulate(fa_score_vector.begin(), fa_score_vector.end(), 0.0, [fragment_score](float total, float value) {
+            return total + std::pow(value - fragment_score, 2);
+        });
+        float fa_intensity_variance_score = 1 - sqrt(sum/4);//分数为1-标准差，方差越大，分数越小
+
+        //fa一致性分数
         fa_consistency_score = float(this->m_fa_info.size()) / 4;
         //总分是碎片分数+一致性分数+pa存在性权重
-        this->m_score = this->m_fragment_score_weight*fragment_score + this->m_fa_consistency_score_weight*fa_consistency_score + this->m_pa_exist_score_weight;
+        this->m_score = this->m_fragment_score_weight*fragment_score + this->m_fa_consistency_score_weight*fa_consistency_score + this->m_pa_exist_score_weight + this->m_fa_intensity_variance_score_weight*fa_intensity_variance_score;
     }
+}
+
+float ClSpecificStructure::GetTotalIntensity()
+{
+    return this->m_total_intensity;
+}
+
+void ClSpecificStructure::CalculateTotalIntensity()
+{
+    if(!this->m_fa_exist && this->m_pa_exist){
+        //把2个PA指针加入set中，因为可以把一样的PA合并
+        set<Pa*> pa_set;
+        pa_set.insert(this->m_left_pa_ptr->m_pa_ptr);
+        pa_set.insert(this->m_right_pa_ptr->m_pa_ptr);
+        for(auto itr = pa_set.begin() ; itr != pa_set.end() ; itr++){
+            this->m_total_intensity = this->m_total_intensity + (*itr)->GetIntensity();
+        }
+    }
+    else if(this->m_fa_exist && !this->m_pa_exist){
+        //把4个FA指针加入set中，因为可以把一样的FA合并
+        set<Fa*> fa_set;
+        fa_set.insert(this->m_left_pa_ptr->m_left_fa_ptr);
+        fa_set.insert(this->m_left_pa_ptr->m_right_fa_ptr);
+        fa_set.insert(this->m_right_pa_ptr->m_left_fa_ptr);
+        fa_set.insert(this->m_right_pa_ptr->m_right_fa_ptr);
+
+        //加分数
+        for(auto itr = fa_set.begin();itr != fa_set.end();itr++){
+            this->m_total_intensity += (*itr)->GetIntensity();
+        }
+    }
+    else{
+        set<Pa*> pa_set;
+        set<Fa*> fa_set;
+        pa_set.insert(this->m_left_pa_ptr->m_pa_ptr);
+        pa_set.insert(this->m_right_pa_ptr->m_pa_ptr);
+        fa_set.insert(this->m_left_pa_ptr->m_left_fa_ptr);
+        fa_set.insert(this->m_left_pa_ptr->m_right_fa_ptr);
+        fa_set.insert(this->m_right_pa_ptr->m_left_fa_ptr);
+        fa_set.insert(this->m_right_pa_ptr->m_right_fa_ptr);
+        for(auto itr = pa_set.begin() ; itr != pa_set.end() ; itr++){
+            this->m_total_intensity = this->m_total_intensity + (*itr)->GetIntensity();
+        }
+        for(auto itr = fa_set.begin();itr != fa_set.end();itr++){
+            this->m_total_intensity += (*itr)->GetIntensity();
+        }
+    }
+}
+
+float ClSpecificStructure::GetMs2TotalIntensity()
+{
+    return this->m_ms2->GetTotalIntensity();
 }
 
 bool ClSpecificStructure::operator==(const ClSpecificStructure &other)
@@ -839,4 +1008,39 @@ QString ClSpecificStructure::ShowSimpleInfo()
     }
 
     return message;
+}
+
+std::vector<int> ClSpecificStructure::GetTotalInfo()
+{
+    return {this->GetTotalChainLength() , this->GetTotalUnsaturation() , this->GetTotalOxygen()};
+}
+
+int ClSpecificStructure::GetTotalChainLength()
+{
+    if(this->m_pa_exist){
+        return this->m_left_pa_ptr->m_pa_ptr->GetChainLength() + this->m_right_pa_ptr->m_pa_ptr->GetChainLength();
+    }
+    else{
+        return this->m_left_pa_ptr->m_left_fa_ptr->GetChainLength() + this->m_left_pa_ptr->m_right_fa_ptr->GetChainLength() + this->m_right_pa_ptr->m_left_fa_ptr->GetChainLength() + this->m_right_pa_ptr->m_right_fa_ptr->GetChainLength();
+    }
+}
+
+int ClSpecificStructure::GetTotalUnsaturation()
+{
+    if(this->m_pa_exist){
+        return this->m_left_pa_ptr->m_pa_ptr->GetUnsaturation() + this->m_right_pa_ptr->m_pa_ptr->GetUnsaturation();
+    }
+    else{
+        return this->m_left_pa_ptr->m_left_fa_ptr->GetUnsaturation() + this->m_left_pa_ptr->m_right_fa_ptr->GetUnsaturation() + this->m_right_pa_ptr->m_left_fa_ptr->GetUnsaturation() + this->m_right_pa_ptr->m_right_fa_ptr->GetUnsaturation();
+    }
+}
+
+int ClSpecificStructure::GetTotalOxygen()
+{
+    if(this->m_pa_exist){
+        return this->m_left_pa_ptr->m_pa_ptr->GetOxygen() + this->m_right_pa_ptr->m_pa_ptr->GetOxygen();
+    }
+    else{
+        return this->m_left_pa_ptr->m_left_fa_ptr->GetOxygen() + this->m_left_pa_ptr->m_right_fa_ptr->GetOxygen() + this->m_right_pa_ptr->m_left_fa_ptr->GetOxygen() + this->m_right_pa_ptr->m_right_fa_ptr->GetOxygen();
+    }
 }

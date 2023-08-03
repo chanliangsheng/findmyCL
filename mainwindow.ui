@@ -1118,81 +1118,6 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>850</y>
-      <width>231</width>
-      <height>89</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_39">
-     <item row="1" column="0">
-      <layout class="QGridLayout" name="gridLayout_37">
-       <item row="0" column="0">
-        <widget class="QLabel" name="LabelSpliceFaConsistencyScoreWeight">
-         <property name="text">
-          <string>fa_consistency_score_weight</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QDoubleSpinBox" name="DoubleSpinBoxSpliceFaConsistencyScoreWeight">
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="2" column="0">
-      <layout class="QGridLayout" name="gridLayout_38">
-       <item row="0" column="0">
-        <widget class="QLabel" name="LabelFindPaAndFaMzScoreWeight_5">
-         <property name="text">
-          <string>pa_exist_score_weight:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QDoubleSpinBox" name="DoubleSpinBoxSplicePaExistScoreWeight">
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="0" column="0">
-      <layout class="QGridLayout" name="gridLayout_36">
-       <item row="0" column="1">
-        <widget class="QDoubleSpinBox" name="DoubleSpinBoxSpliceFragmentScoreWeight">
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="LabelSpliceFragmentScoreWeight">
-         <property name="text">
-          <string>fragment_score_weight</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
    <widget class="QPushButton" name="PushButtonOutputResultDir">
     <property name="geometry">
      <rect>
@@ -1205,6 +1130,102 @@
     <property name="text">
      <string>output result</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>850</y>
+      <width>270</width>
+      <height>120</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_44">
+     <item row="0" column="0" colspan="2">
+      <layout class="QGridLayout" name="gridLayout_39">
+       <item row="1" column="0">
+        <layout class="QGridLayout" name="gridLayout_37">
+         <item row="0" column="0">
+          <widget class="QLabel" name="LabelSpliceFaConsistencyScoreWeight">
+           <property name="text">
+            <string>fa_consistency_score_weight</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxSpliceFaConsistencyScoreWeight">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.010000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0">
+        <layout class="QGridLayout" name="gridLayout_38">
+         <item row="0" column="0">
+          <widget class="QLabel" name="LabelFindPaAndFaMzScoreWeight_5">
+           <property name="text">
+            <string>pa_exist_score_weight:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxSplicePaExistScoreWeight">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>0.100000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_36">
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="DoubleSpinBoxSpliceFragmentScoreWeight">
+           <property name="maximum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>1.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="LabelSpliceFragmentScoreWeight">
+           <property name="text">
+            <string>fragment_score_weight</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="LabelFindPaAndFaMzScoreWeight_7">
+       <property name="text">
+        <string>fa_intensity_variance_score_weight:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QDoubleSpinBox" name="DoubleSpinBoxSpliceFaIntensityVarianceScoreWeight">
+       <property name="maximum">
+        <double>1.000000000000000</double>
+       </property>
+       <property name="value">
+        <double>0.300000000000000</double>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

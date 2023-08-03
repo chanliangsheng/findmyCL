@@ -90,6 +90,18 @@ std::vector<float> Ms2::GetFragmentIonIntensity()
     return this->m_fragment_ion_intensity;
 }
 
+float Ms2::GetTotalIntensity()
+{
+    return this->m_total_intensity;
+}
+
+void Ms2::CalculateTotalIntensity()
+{
+    for(auto itr = this->m_fragment_ion_intensity.begin() ; itr != this->m_fragment_ion_intensity.end() ; itr++){
+        this->m_total_intensity = this->m_total_intensity + (*itr);
+    }
+}
+
 std::vector<Headgroup> Ms2::GetHeadgroup()
 {
     return this->m_headgroup;

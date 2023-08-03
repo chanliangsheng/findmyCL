@@ -1,10 +1,5 @@
 #include <DLCL.h>
 
-float DlclSpecificStructure::m_fragment_score_weight = 1;
-float DlclSpecificStructure::m_fa_consistency_score_weight = 1;
-float DlclSpecificStructure::m_pa_exist_score_weight = 1;
-
-
 using namespace std;
 Dlcl::Dlcl()
 {
@@ -51,6 +46,8 @@ void Dlcl::splice()
             this->OnePaTwoFaSpliceDlcl(*ms2_itr);
         }
     }
+
+    this->DeleteRedundantSpliceResult();
 
     //如果没有拼接成功，则清空对象
     if(this->m_dlcl_specific_structure_vector.size() == 0){
@@ -299,7 +296,25 @@ void Dlcl::EmptyObject()
             }
         }
         //把所有的MLCL详细结构清空
-        list<DlclSpecificStructure>().swap(this->m_dlcl_specific_structure_vector);
+        this->ClearSpliceResult();
+    }
+}
+
+void Dlcl::ClearSpliceResult()
+{
+    list<DlclSpecificStructure>().swap(this->m_dlcl_specific_structure_vector);
+}
+
+void Dlcl::DeleteRedundantSpliceResult()
+{
+    //删除拼接结果总强度小于二级总强度5%的拼接结果
+    for(auto itr = this->m_dlcl_specific_structure_vector.begin() ; itr != this->m_dlcl_specific_structure_vector.end();){
+        if((itr->GetTotalIntensity() / itr->GetMs2TotalIntensity()) <= this->m_delete_redundant_splice_result_radio){
+            itr = this->m_dlcl_specific_structure_vector.erase(itr);
+        }
+        else{
+            itr++;
+        }
     }
 }
 

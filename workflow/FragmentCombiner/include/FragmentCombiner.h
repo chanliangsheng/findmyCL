@@ -22,7 +22,7 @@ public:
     void OutputResultWithTxt(QString folder_path);//输出结果的txt文件
     void OutPutWithCsv(QString folder_path);//输出结果的csv文件
     void Filter();//过滤某些心磷脂
-
+    void ClearSpliceResult();
 public:
     static std::string mode;//拼接的模式，初始化为strict，还有另外一个模式flexible
 public:

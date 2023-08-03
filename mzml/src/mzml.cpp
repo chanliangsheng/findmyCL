@@ -119,7 +119,8 @@ void Mzml::ConvertMs2RtUnit(QString mode)
 void Mzml::DeleteMs2LowIntensityFragment(float radio)
 {
     for(auto itr = this->m_ms2_vector.begin() ; itr != this->m_ms2_vector.end() ; itr++){
-        itr->DeleteLowIntensityFragment(radio);
+        itr->DeleteLowIntensityFragment(radio);//删除冗余值
+        itr->CalculateTotalIntensity();//计算这个二级的所有碎片的强度之和
     }
 
     qDebug() <<"二级过滤了"<< radio;

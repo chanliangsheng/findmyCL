@@ -47,6 +47,8 @@ void Mlcl::splice()
         }
     }
 
+    this->DeleteRedundantSpliceResult();
+
     //如果没有拼接成功，则清空对象
     if(this->m_mlcl_specific_structure_vector.size() == 0){
         this->EmptyObject();
@@ -364,7 +366,25 @@ void Mlcl::EmptyObject()
             }
         }
         //把所有的MLCL详细结构清空
-        list<MlclSpecificStructure>().swap(this->m_mlcl_specific_structure_vector);
+        this->ClearSpliceResult();
+    }
+}
+
+void Mlcl::ClearSpliceResult()
+{
+    list<MlclSpecificStructure>().swap(this->m_mlcl_specific_structure_vector);
+}
+
+void Mlcl::DeleteRedundantSpliceResult()
+{
+    //删除拼接结果总强度小于二级总强度5%的拼接结果
+    for(auto itr = this->m_mlcl_specific_structure_vector.begin() ; itr != this->m_mlcl_specific_structure_vector.end();){
+        if((itr->GetTotalIntensity() / itr->GetMs2TotalIntensity()) <= this->m_delete_redundant_splice_result_radio){
+            itr = this->m_mlcl_specific_structure_vector.erase(itr);
+        }
+        else{
+            itr++;
+        }
     }
 }
 

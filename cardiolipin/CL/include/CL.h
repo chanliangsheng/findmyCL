@@ -21,6 +21,8 @@ public:
     std::set<std::set<Fa*>>& FourFaSpliceTwoPa(Pa* pa_1_ptr , Pa* pa_2_ptr , std::vector<Fa>* fa_vector_ptr , std::set<std::set<Fa*>>& store , Ms2* ms2_ptr);//四个FA拼接两个PA，返回引用
 public:
     void EmptyObject() override;
+    void ClearSpliceResult();
+    void DeleteRedundantSpliceResult();
 };
 
 

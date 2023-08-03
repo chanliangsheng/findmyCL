@@ -1,5 +1,6 @@
 #include "cardiolipin.h"
 
+float Cardiolipin::m_delete_redundant_splice_result_radio = 0.2;
 
 using namespace std;
 Cardiolipin::Cardiolipin()
