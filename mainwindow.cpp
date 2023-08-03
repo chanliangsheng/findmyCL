@@ -356,7 +356,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this->ui->PushButtonSplice , &QPushButton::clicked , fragment_combiner_ptr , [=]() mutable{
         fragment_combiner_ptr->CopyInfoFromMs2WithPaAndFa(*fragment_finder_ptr);
         fragment_combiner_ptr->mode = this->ui->ComboBoxSpliceMode->currentText().toStdString();
-        Cardiolipin::m_delete_redundant_splice_result_radio = 0.2;
+        Cardiolipin::m_delete_redundant_splice_result_radio = 0;
         //增加权重
         ClSpecificStructure::m_fragment_score_weight = this->ui->DoubleSpinBoxSpliceFragmentScoreWeight->value();
         MlclSpecificStructure::m_fragment_score_weight = this->ui->DoubleSpinBoxSpliceFragmentScoreWeight->value();
